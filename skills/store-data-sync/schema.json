@@ -1,0 +1,185 @@
+{
+  "skill_id": "de_local_08_sk01",
+  "name": "门店数据对接",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["store_name", "sources"],
+    "properties": {
+      "store_name": {
+        "type": "string",
+        "description": "门店名称"
+      },
+      "sources": {
+        "type": "array",
+        "description": "数据源数组（收银系统 / 平台商家后台 / 开放平台 / 企业微信等）",
+        "items": {
+          "type": "object",
+          "required": ["source", "access"],
+          "properties": {
+            "source": {"type": "string", "description": "数据源名称"},
+            "access": {
+              "type": "string",
+              "description": "接入方式。白名单：官方API / 用户导出 / 商家后台 / 手工录入；黑名单：爬取 / 模拟登录 / 协议机器人 / 接码（命中即红线剔除）"
+            },
+            "authorized": {"type": "boolean", "description": "是否已完成账号授权，未授权不得采集"},
+            "owner": {"type": "string", "description": "该数据源的责任人"},
+            "last_sync": {"type": "string", "description": "最近一次成功同步时间 ISO8601，距今 > 24 小时且为官方 API 时标记授权可能到期"},
+            "expected_fields": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "本员工需要该源提供的最小字段集"
+            },
+            "actual_fields": {
+              "type": "array",
+              "items": {"type": "string"},
+              "description": "实际拿到的字段清单，用于计算字段完整率"
+            }
+          }
+        }
+      },
+      "period": {
+        "type": "object",
+        "description": "统计区间",
+        "properties": {
+          "start": {"type": "string"},
+          "end": {"type": "string"}
+        }
+      },
+      "daily_arrival": {
+        "type": "array",
+        "description": "每日到数记录，用于计算覆盖率与断供天数（断供不补零）",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {"type": "string", "description": "日期 YYYY-MM-DD"},
+            "arrived": {"type": "integer", "description": "当日实到源数"},
+            "expected": {"type": "integer", "description": "当日应到源数"}
+          }
+        }
+      },
+      "raw_samples": {
+        "type": "array",
+        "description": "待入库的原始值抽样，用于个人信息脱敏扫描",
+        "items": {
+          "type": "object",
+          "properties": {
+            "source": {"type": "string", "description": "来源数据源"},
+            "field": {"type": "string", "description": "字段名"},
+            "value": {"type": "string", "description": "字段值（脚本只输出脱敏后示例）"}
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["summary", "sources", "field_mapping", "pii_check"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "接入体检结论",
+        "properties": {
+          "门店": {"type": "string"},
+          "数据源总数": {"type": "integer"},
+          "正常数据源": {"type": "integer"},
+          "红线数据源": {"type": "integer"},
+          "未授权/字段不全": {"type": "integer"},
+          "合规源平均字段完整率%": {"type": "number"},
+          "断供天数": {"type": "integer"},
+          "断供日期": {"type": "string"},
+          "脱敏红线条数": {"type": "integer"},
+          "阻断项合计": {"type": "integer"}
+        }
+      },
+      "sources": {
+        "type": "array",
+        "description": "数据源清单",
+        "items": {
+          "type": "object",
+          "properties": {
+            "数据源": {"type": "string"},
+            "接入方式": {"type": "string"},
+            "授权状态": {"type": "string", "enum": ["已授权", "未授权"]},
+            "责任人": {"type": "string"},
+            "最近同步": {"type": "string"},
+            "应到字段": {"type": "integer"},
+            "实到字段": {"type": "integer"},
+            "字段完整率%": {"type": "number"},
+            "缺失字段": {"type": "string"},
+            "判定": {"type": "string", "enum": ["✅ 正常", "🟡 字段不全", "🟡 未授权", "🔴 红线：禁止接入"]},
+            "处理动作": {"type": "string"}
+          }
+        }
+      },
+      "field_mapping": {
+        "type": "array",
+        "description": "字段映射与降级路径",
+        "items": {
+          "type": "object",
+          "properties": {
+            "数据源": {"type": "string"},
+            "字段": {"type": "string"},
+            "是否到数": {"type": "string", "enum": ["✅ 到数", "❌ 缺失"]},
+            "下游影响": {"type": "string"},
+            "降级路径": {"type": "string"}
+          }
+        }
+      },
+      "daily_arrival": {
+        "type": "array",
+        "description": "每日到数覆盖率（断供日不补零）",
+        "items": {
+          "type": "object",
+          "properties": {
+            "日期": {"type": "string"},
+            "应到源数": {"type": "integer"},
+            "实到源数": {"type": "integer"},
+            "覆盖率%": {"type": "number"},
+            "状态": {"type": "string", "enum": ["✅ 全到", "🟡 部分到数", "🔴 全断"]}
+          }
+        }
+      },
+      "pii_check": {
+        "type": "array",
+        "description": "个人信息脱敏检查（手机号/身份证/银行卡/邮箱/详细地址）",
+        "items": {
+          "type": "object",
+          "properties": {
+            "数据源": {"type": "string"},
+            "字段": {"type": "string"},
+            "个人信息类型": {"type": "string"},
+            "脱敏后示例": {"type": "string"},
+            "判定": {"type": "string", "enum": ["✅ 通过", "🔴 红线：禁止录入"]},
+            "依据": {"type": "string"},
+            "处理动作": {"type": "string"}
+          }
+        }
+      }
+    },
+    "x-rendered-from": "capability:connector_io"
+  },
+  "scripts": {
+    "sync": "scripts/sync.py",
+    "usage": "python3 scripts/sync.py --input examples/input.json --outdir out",
+    "demo": "python3 scripts/sync.py --demo --outdir out"
+  },
+  "artifacts": [
+    "out/门店数据接入清单.xlsx",
+    "out/接入完整率.png",
+    "out/到数趋势图.png",
+    "out/sync.json"
+  ],
+  "constraints": {
+    "max_input_length": 20000,
+    "forbidden_words": ["最好", "第一", "100%"],
+    "ai_label_required": true,
+    "human_review_required": true,
+    "external_api_required": false,
+    "read_only": true,
+    "no_model_calculation": true,
+    "allowed_access": ["官方API", "用户导出", "商家后台", "手工录入"],
+    "forbidden_access": ["爬取", "模拟登录", "协议机器人", "接码"],
+    "pii_forbidden": ["手机号", "身份证号", "银行卡号", "邮箱", "详细地址", "客户姓名/昵称"]
+  }
+}

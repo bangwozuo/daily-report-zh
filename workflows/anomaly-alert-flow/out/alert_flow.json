@@ -1,0 +1,26 @@
+{
+  "flow": "anomaly-alert-flow",
+  "store_name": "望京 SOHO 店",
+  "period": {
+    "start": "2026-09-01",
+    "end": "2026-09-30"
+  },
+  "detected": 24,
+  "pushed": 14,
+  "suppressed": 10,
+  "silent_now": false,
+  "push_mode": "立即推送",
+  "on_call": "店长 王敏 138****1111",
+  "human_confirm_required": true,
+  "artifacts": {
+    "push_xlsx": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\anomaly-alert-flow\\out\\预警推送单.xlsx",
+    "push_md": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\anomaly-alert-flow\\out\\推送消息预览.md",
+    "step1_dir": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\anomaly-alert-flow\\out\\steps\\01-异常检测",
+    "step1_files": [
+      "detect.json",
+      "异常预警清单.xlsx",
+      "趋势图.png"
+    ]
+  },
+  "generated_at": "2026-09-30 20:17:42"
+}

@@ -1,0 +1,27 @@
+{
+  "flow": "store-data-collect-flow",
+  "store_name": "望京 SOHO 店",
+  "gate": "BLOCK",
+  "gate_reason": "存在 1 个红线数据源，禁止进入下游流程",
+  "downstream_allowed": false,
+  "redline_sources": [
+    "竞品门店客流"
+  ],
+  "degraded_sources": [
+    "美团/点评商家后台",
+    "抖音开放平台"
+  ],
+  "gap_days": "2026-09-15、2026-09-16、2026-09-23",
+  "pii_redlines": 4,
+  "artifacts": {
+    "collect_xlsx": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\store-data-collect-flow\\out\\采集归集单.xlsx",
+    "step1_dir": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\store-data-collect-flow\\out\\steps\\01-接入体检",
+    "step1_files": [
+      "sync.json",
+      "到数趋势图.png",
+      "接入完整率.png",
+      "门店数据接入清单.xlsx"
+    ]
+  },
+  "generated_at": "2026-09-30 20:17:48"
+}

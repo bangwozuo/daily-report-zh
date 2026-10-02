@@ -1,0 +1,133 @@
+{
+  "skill_id": "de_local_08_sk02",
+  "name": "日报文案生成",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["metrics"],
+    "properties": {
+      "metrics": {
+        "type": "object",
+        "description": "指标数据。派生指标（客单价/转化率/退款率）由公式重算，不接受用户直接给结论",
+        "properties": {
+          "date": {"type": "string", "description": "日期 YYYY-MM-DD"},
+          "weekday": {"type": "string", "description": "星期几，用于星期对齐"},
+          "revenue": {"type": "number", "description": "营收（元）"},
+          "orders": {"type": "number", "description": "订单数"},
+          "visitors": {"type": "number", "description": "访客数，用于算转化率"},
+          "refunds": {"type": "number", "description": "退款额（元），用于算退款率"},
+          "last_year_revenue": {"type": "number", "description": "去年同期营收（元）"},
+          "rating": {"type": "number", "description": "平台评分"},
+          "bad_reviews": {"type": "number", "description": "差评数"}
+        }
+      },
+      "period": {
+        "type": "string",
+        "description": "报告覆盖的时间范围，如 2026-09-12 或 2026-09-23 ~ 2026-09-29"
+      },
+      "compare": {
+        "type": "object",
+        "description": "对比口径，如上周同星期、同星期均值、去年同期；用于给每个数字配参照物"
+      },
+      "special_days": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "已知特殊期（促销日 / 节假日）日期，命中的日期不写异常"
+      },
+      "store_age_days": {
+        "type": "number",
+        "description": "门店开业天数，< 30 天时偏离写「新店常规波动」不写异常"
+      },
+      "alerts": {
+        "type": "array",
+        "description": "确认异常清单（推荐取自 anomaly-detect 脚本 detect.json 的确认异常条目），字段：日期/星期/指标/规则/级别/实际值/阈值基线/证据/判定。本技能只引用已判定异常，不重复检测",
+        "items": {
+          "type": "object",
+          "properties": {
+            "日期": {"type": "string"},
+            "指标": {"type": "string"},
+            "规则": {"type": "string"},
+            "级别": {"type": "string"},
+            "实际值": {"type": "string"},
+            "阈值/基线": {"type": "string"},
+            "证据": {"type": "string"},
+            "判定": {"type": "string", "description": "仅「确认异常」条目进入日报异常点章节"}
+          }
+        }
+      },
+      "store_name": {
+        "type": "string",
+        "description": "门店名称，用于标题"
+      },
+      "category": {
+        "type": "string",
+        "description": "品类，影响健康区间口径",
+        "enum": ["餐饮", "零售", "通用"]
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["headline", "metrics_summary", "drivers", "suggestion"],
+    "properties": {
+      "headline": {
+        "type": "string",
+        "description": "一句话结论：方向（涨/跌/稳）+ 幅度 + 归因，≤ 40 字"
+      },
+      "metrics_summary": {
+        "type": "array",
+        "description": "三个关键数（绝不超 3 个，按优先级取前 3）",
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "properties": {
+            "指标": {"type": "string"},
+            "本期": {"type": "string"},
+            "对比": {"type": "string", "description": "必须带参照物：上周同星期 / 同星期均值 / 去年同期"},
+            "判定": {"type": "string", "description": "按行业健康区间给出：健康 / 需关注 / 需当天处理"}
+          }
+        }
+      },
+      "drivers": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "归因说明：为什么是这个结果，含星期对齐核对结论"
+      },
+      "suggestion": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "行动建议：每条含责任人 + 动作 + 范围，≤ 60 字，不写空话"
+      },
+      "reminder": {
+        "type": "string",
+        "description": "一句提醒（可选）：需要留意的风险，只写 1 条"
+      }
+    },
+    "x-rendered-from": "capability:report"
+  },
+  "scripts": [
+    {
+      "path": "scripts/report_copy.py",
+      "usage": "python scripts/report_copy.py --input examples/input.json --outdir out | --demo",
+      "description": "读取日报数据 JSON（指标 + 异常检测结果），按「结论前置 → 核心指标表 → 异常点与排查方向 → 明日建议」生成 Word 日报与数据摘要 Excel；派生指标与关键数挑选由脚本完成，数值以脚本输出为准",
+      "modes": ["--input", "--demo"],
+      "artifacts": [
+        "out/经营日报.docx",
+        "out/日报数据摘要.xlsx",
+        "out/report_copy.json"
+      ]
+    }
+  ],
+  "constraints": {
+    "max_input_length": 5000,
+    "forbidden_words": ["最好", "第一", "100%", "绝对"],
+    "ai_label_required": true,
+    "human_review_required": true,
+    "external_api_required": false,
+    "max_key_metrics": 3,
+    "max_body_chars": 200,
+    "weekday_alignment_required": true,
+    "min_orders_for_conclusion": 20,
+    "derived_metrics_recomputed": true
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "flow": "daily-report-generate-flow",
+  "store_name": "望京 SOHO 店",
+  "period": "2026-09-13",
+  "headline": "今天稳，营收 ¥12,018，比上周同星期（2026-09-06 周日） 多 3.4%，指标落在正常波动带内。",
+  "key_metrics": [
+    {
+      "指标": "营收",
+      "本期": "¥12,018",
+      "对比": "上周同星期（2026-09-06 周日） ¥11,621，+3.4%",
+      "判定": "正常波动带内（±20%）"
+    },
+    {
+      "指标": "转化率",
+      "本期": "1.58%",
+      "对比": "健康区间 2.0%~5.0%",
+      "判定": "低于健康下限"
+    },
+    {
+      "指标": "订单数",
+      "本期": "194 单",
+      "对比": "上周同星期（2026-09-06 周日） 185 单",
+      "判定": "与营收同向参考"
+    }
+  ],
+  "day_anomalies": 0,
+  "reminder": "当日无异常，指标平稳。",
+  "suggestion": "维持现有排班与活动节奏，明天同一时间再看一次转化率。",
+  "human_confirm_required": true,
+  "artifacts": {
+    "docx": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\daily-report-generate-flow\\out\\经营日报.docx",
+    "xlsx": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\daily-report-generate-flow\\out\\经营日报.xlsx",
+    "chart": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\daily-report-generate-flow\\out\\steps\\01-异常检测\\趋势图.png",
+    "step1_dir": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\daily-report-generate-flow\\out\\steps\\01-异常检测"
+  },
+  "generated_at": "2026-09-30 20:17:45"
+}

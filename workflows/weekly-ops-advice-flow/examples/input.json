@@ -1,0 +1,152 @@
+{
+  "store_name": "望京 SOHO 店",
+  "category": "餐饮",
+  "period": {
+    "start": "2026-09-07",
+    "end": "2026-09-13"
+  },
+  "last_week": {
+    "start": "2026-08-31",
+    "end": "2026-09-06",
+    "revenue": 78920,
+    "orders": 1250,
+    "visitors": 41500,
+    "refunds": 1960
+  },
+  "metrics": [
+    {
+      "date": "2026-09-01",
+      "revenue": 8893,
+      "orders": 143,
+      "visitors": 4791,
+      "refunds": 225,
+      "last_year_revenue": 7905
+    },
+    {
+      "date": "2026-09-02",
+      "revenue": 8765,
+      "orders": 143,
+      "visitors": 4802,
+      "refunds": 233,
+      "last_year_revenue": 7777
+    },
+    {
+      "date": "2026-09-03",
+      "revenue": 8908,
+      "orders": 137,
+      "visitors": 4517,
+      "refunds": 217,
+      "last_year_revenue": 7958
+    },
+    {
+      "date": "2026-09-04",
+      "revenue": 8793,
+      "orders": 142,
+      "visitors": 4774,
+      "refunds": 215,
+      "last_year_revenue": 7486
+    },
+    {
+      "date": "2026-09-05",
+      "revenue": 11077,
+      "orders": 178,
+      "visitors": 5988,
+      "refunds": 238,
+      "last_year_revenue": 9791
+    },
+    {
+      "date": "2026-09-06",
+      "revenue": 11621,
+      "orders": 185,
+      "visitors": 6120,
+      "refunds": 308,
+      "last_year_revenue": 10298
+    },
+    {
+      "date": "2026-09-07",
+      "revenue": 8929,
+      "orders": 138,
+      "visitors": 4645,
+      "refunds": 234,
+      "last_year_revenue": 7798
+    },
+    {
+      "date": "2026-09-08",
+      "revenue": 6247,
+      "orders": 103,
+      "visitors": 4478,
+      "refunds": 208,
+      "last_year_revenue": 5466
+    },
+    {
+      "date": "2026-09-09",
+      "revenue": 9184,
+      "orders": 149,
+      "visitors": 4923,
+      "refunds": 624,
+      "last_year_revenue": 8211
+    },
+    {
+      "date": "2026-09-10",
+      "revenue": 9323,
+      "orders": 151,
+      "visitors": 5073,
+      "refunds": 204,
+      "last_year_revenue": 8075
+    },
+    {
+      "date": "2026-09-11",
+      "revenue": 9077,
+      "orders": 148,
+      "visitors": 9368,
+      "refunds": 219,
+      "last_year_revenue": 7796
+    },
+    {
+      "date": "2026-09-12",
+      "revenue": 11490,
+      "orders": 178,
+      "visitors": 11377,
+      "refunds": 268,
+      "last_year_revenue": 10091
+    },
+    {
+      "date": "2026-09-13",
+      "revenue": 12018,
+      "orders": 194,
+      "visitors": 12243,
+      "refunds": 271,
+      "last_year_revenue": 10308
+    },
+    {
+      "date": "2026-09-14",
+      "revenue": 9352,
+      "orders": 149,
+      "visitors": 5004,
+      "refunds": 207,
+      "last_year_revenue": 8296
+    },
+    {
+      "date": "2026-09-16",
+      "revenue": 9140,
+      "orders": 146,
+      "visitors": 4834,
+      "refunds": 195,
+      "last_year_revenue": 7962
+    },
+    {
+      "date": "2026-09-17",
+      "revenue": 9532,
+      "orders": 151,
+      "visitors": 5033,
+      "refunds": 248,
+      "last_year_revenue": 8539
+    }
+  ],
+  "focus": "下周只给一个重点动作",
+  "action_constraints": {
+    "owner": "店长 王敏",
+    "budget_ceiling": 0,
+    "max_actions": 1
+  }
+}

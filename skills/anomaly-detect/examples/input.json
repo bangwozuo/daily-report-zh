@@ -1,0 +1,249 @@
+{
+  "store_name": "望京 SOHO 店",
+  "category": "餐饮",
+  "period": {
+    "start": "2026-09-01",
+    "end": "2026-09-30"
+  },
+  "opened_date": "2025-04-18",
+  "promo_days": [
+    "2026-09-18"
+  ],
+  "holidays": [
+    "2026-09-25"
+  ],
+  "metrics": [
+    {
+      "date": "2026-09-01",
+      "revenue": 8653,
+      "orders": 138,
+      "visitors": 4620,
+      "refunds": 219,
+      "last_year_revenue": 7514
+    },
+    {
+      "date": "2026-09-02",
+      "revenue": 8870,
+      "orders": 143,
+      "visitors": 4797,
+      "refunds": 236,
+      "last_year_revenue": 7814
+    },
+    {
+      "date": "2026-09-03",
+      "revenue": 8272,
+      "orders": 126,
+      "visitors": 4212,
+      "refunds": 208,
+      "last_year_revenue": 7154
+    },
+    {
+      "date": "2026-09-04",
+      "revenue": 8763,
+      "orders": 143,
+      "visitors": 4761,
+      "refunds": 185,
+      "last_year_revenue": 7334
+    },
+    {
+      "date": "2026-09-05",
+      "revenue": 11276,
+      "orders": 174,
+      "visitors": 5762,
+      "refunds": 278,
+      "last_year_revenue": 9817
+    },
+    {
+      "date": "2026-09-06",
+      "revenue": 10890,
+      "orders": 173,
+      "visitors": 5792,
+      "refunds": 249,
+      "last_year_revenue": 9193
+    },
+    {
+      "date": "2026-09-07",
+      "revenue": 9191,
+      "orders": 146,
+      "visitors": 4920,
+      "refunds": 195,
+      "last_year_revenue": 7670
+    },
+    {
+      "date": "2026-09-08",
+      "revenue": 8942,
+      "orders": 140,
+      "visitors": 4662,
+      "refunds": 240,
+      "last_year_revenue": 11922
+    },
+    {
+      "date": "2026-09-09",
+      "revenue": 8667,
+      "orders": 141,
+      "visitors": 4708,
+      "refunds": 220,
+      "last_year_revenue": 7486
+    },
+    {
+      "date": "2026-09-10",
+      "revenue": 9264,
+      "orders": 147,
+      "visitors": 4938,
+      "refunds": 225,
+      "last_year_revenue": 8009
+    },
+    {
+      "date": "2026-09-11",
+      "revenue": 8679,
+      "orders": 134,
+      "visitors": 4524,
+      "refunds": 184,
+      "last_year_revenue": 7624
+    },
+    {
+      "date": "2026-09-12",
+      "revenue": 6895,
+      "orders": 124,
+      "visitors": 5957,
+      "refunds": 276,
+      "last_year_revenue": 5954
+    },
+    {
+      "date": "2026-09-13",
+      "revenue": 11396,
+      "orders": 175,
+      "visitors": 5840,
+      "refunds": 261,
+      "last_year_revenue": 9759
+    },
+    {
+      "date": "2026-09-14",
+      "revenue": 8986,
+      "orders": 147,
+      "visitors": 4873,
+      "refunds": 207,
+      "last_year_revenue": 7676
+    },
+    {
+      "date": "2026-09-16",
+      "revenue": 8773,
+      "orders": 136,
+      "visitors": 4519,
+      "refunds": 229,
+      "last_year_revenue": 7560
+    },
+    {
+      "date": "2026-09-17",
+      "revenue": 9186,
+      "orders": 147,
+      "visitors": 4944,
+      "refunds": 207,
+      "last_year_revenue": 8147
+    },
+    {
+      "date": "2026-09-18",
+      "revenue": 15643,
+      "orders": 227,
+      "visitors": 7047,
+      "refunds": 247,
+      "last_year_revenue": 13529
+    },
+    {
+      "date": "2026-09-19",
+      "revenue": 11661,
+      "orders": 181,
+      "visitors": 5978,
+      "refunds": 265,
+      "last_year_revenue": 10071
+    },
+    {
+      "date": "2026-09-20",
+      "revenue": 12221,
+      "orders": 194,
+      "visitors": 6458,
+      "refunds": 965,
+      "last_year_revenue": 10310
+    },
+    {
+      "date": "2026-09-21",
+      "revenue": 8925,
+      "orders": 140,
+      "visitors": 4615,
+      "refunds": 705,
+      "last_year_revenue": 7805
+    },
+    {
+      "date": "2026-09-22",
+      "revenue": 8928,
+      "orders": 136,
+      "visitors": 9364,
+      "refunds": 705,
+      "last_year_revenue": 7477
+    },
+    {
+      "date": "2026-09-23",
+      "revenue": 9632,
+      "orders": 148,
+      "visitors": 10090,
+      "refunds": 760,
+      "last_year_revenue": 8463
+    },
+    {
+      "date": "2026-09-24",
+      "revenue": 9121,
+      "orders": 143,
+      "visitors": 9733,
+      "refunds": 720,
+      "last_year_revenue": 7655
+    },
+    {
+      "date": "2026-09-25",
+      "revenue": 7089,
+      "orders": 120,
+      "visitors": 5353,
+      "refunds": 228,
+      "last_year_revenue": 6229
+    },
+    {
+      "date": "2026-09-26",
+      "revenue": 12063,
+      "orders": 186,
+      "visitors": 6223,
+      "refunds": 261,
+      "last_year_revenue": 10204
+    },
+    {
+      "date": "2026-09-27",
+      "revenue": 2389,
+      "orders": 15,
+      "visitors": 1880,
+      "refunds": 304,
+      "last_year_revenue": 2173
+    },
+    {
+      "date": "2026-09-28",
+      "revenue": 9684,
+      "orders": 157,
+      "visitors": 5240,
+      "refunds": 214,
+      "last_year_revenue": 8200
+    },
+    {
+      "date": "2026-09-29",
+      "revenue": 9236,
+      "orders": 142,
+      "visitors": 4790,
+      "refunds": 208,
+      "last_year_revenue": 7798
+    },
+    {
+      "date": "2026-09-30",
+      "revenue": 9618,
+      "orders": 154,
+      "visitors": 5156,
+      "refunds": 251,
+      "last_year_revenue": 8403
+    }
+  ]
+}

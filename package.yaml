@@ -1,0 +1,41 @@
+name: 经营日报员
+repo: bangwozuo/daily-report-zh
+legacy_name: 门店经营日报分析师
+version: 0.2.0
+asset_type: prompt-only
+stage: P0
+complexity: **S**（Mock 形态纯提示词）
+group: 本地生活商家
+runtime_dependencies: none
+api_key_required: false
+demand_ids:
+  - D02
+  - D06
+  - D27
+
+workflows:
+  - name: 门店数据采集
+    id: de_local_08_wf01
+  - name: 日报生成
+    id: de_local_08_wf02
+  - name: 异常预警
+    id: de_local_08_wf03
+  - name: 周度经营建议
+    id: de_local_08_wf04
+
+skills:
+  - id: store-data-sync
+    name: 门店数据对接
+    family: 
+  - id: daily-report-copy
+    name: 日报文案生成
+    family: 
+  - id: anomaly-detect
+    name: 异常检测
+    family: 
+
+compliance:
+  ai_label_required: true
+  human_review_required: true
+  forbidden_words_check: true
+  official_api_only: true

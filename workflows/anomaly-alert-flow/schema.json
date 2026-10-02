@@ -1,0 +1,110 @@
+{
+  "workflow_id": "de_local_08_wf03",
+  "name": "异常预警",
+  "type": "composite",
+  "skill_refs": [
+    "de_local_08_sk03"
+  ],
+  "steps": [
+    {"#": 1, "name": "异常检测", "asset": "../../skills/anomaly-detect/", "script": "skills/anomaly-detect/scripts/detect.py"},
+    {"#": 2, "name": "推送编排", "asset": "./", "script": "workflows/anomaly-alert-flow/scripts/run_flow.py"},
+    {"#": 3, "name": "生成消息", "asset": "./", "script": "workflows/anomaly-alert-flow/scripts/run_flow.py"},
+    {"#": 4, "name": "人工确认", "asset": "human", "script": null},
+    {"#": 5, "name": "交付", "asset": "./", "script": "workflows/anomaly-alert-flow/scripts/run_flow.py"}
+  ],
+  "input": {
+    "type": "object",
+    "required": ["store_name", "metrics"],
+    "properties": {
+      "store_name": {"type": "string", "description": "门店名称"},
+      "category": {"type": "string", "description": "品类，决定行业基准", "enum": ["餐饮", "零售", "通用"]},
+      "period": {
+        "type": "object",
+        "description": "统计区间",
+        "properties": {"start": {"type": "string"}, "end": {"type": "string"}}
+      },
+      "opened_date": {"type": "string", "description": "开业日期，用于新店 30 天保护期"},
+      "promo_days": {"type": "array", "items": {"type": "string"}, "description": "促销日，命中则拦截不推送"},
+      "holidays": {"type": "array", "items": {"type": "string"}, "description": "节假日，命中则拦截不推送"},
+      "metrics": {
+        "type": "array",
+        "description": "日经营指标，结构同 anomaly-detect",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {"type": "string"},
+            "revenue": {"type": "number"},
+            "orders": {"type": "number"},
+            "visitors": {"type": "number"},
+            "refunds": {"type": "number"},
+            "last_year_revenue": {"type": "number"}
+          }
+        }
+      },
+      "alert_policy": {
+        "type": "object",
+        "description": "推送策略",
+        "properties": {
+          "push_levels": {
+            "type": "array",
+            "items": {"type": "string", "enum": ["高", "中", "低"]},
+            "description": "进入推送的级别，默认 [高, 中]"
+          },
+          "channels": {
+            "type": "object",
+            "description": "级别 → 渠道映射，如 {\"高\": [\"企业微信群机器人\"], \"中\": [\"企业微信群机器人\"]}"
+          },
+          "silent_hours": {"type": "string", "description": "免打扰时段，支持跨零点，默认 23:00-07:00"},
+          "on_call": {"type": "string", "description": "值班人"},
+          "dedup_window_hours": {"type": "number", "description": "同指标去重窗口（小时），默认 12"},
+          "escalate_if_no_ack_minutes": {"type": "number", "description": "未确认升级时限（分钟），默认 30"}
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["pushed", "suppressed", "push_mode", "on_call", "human_confirm_required", "artifacts"],
+    "properties": {
+      "flow": {"type": "string"},
+      "store_name": {"type": "string"},
+      "period": {"type": "object"},
+      "detected": {"type": "integer", "description": "第 1 步检出的预警总条数"},
+      "pushed": {"type": "integer", "description": "进入推送清单的条数"},
+      "suppressed": {"type": "integer", "description": "被抑制的条数（特殊期 / 只报值 / 级别不足 / 去重）"},
+      "silent_now": {"type": "boolean", "description": "当前是否处于免打扰时段"},
+      "push_mode": {"type": "string", "description": "立即推送 / 免打扰时段内改为次日 07:00 汇总推送"},
+      "on_call": {"type": "string", "description": "值班人"},
+      "human_confirm_required": {"type": "boolean", "description": "恒为 true：对外推送必须先人工确认"},
+      "artifacts": {
+        "type": "object",
+        "description": "产物路径：推送单 xlsx / 消息预览 md / 流程 json / 第 1 步原始产物目录"
+      },
+      "generated_at": {"type": "string"}
+    },
+    "x-rendered-from": "workflow:anomaly-alert-flow"
+  },
+  "scripts": {
+    "run_flow": "scripts/run_flow.py",
+    "usage": "python3 scripts/run_flow.py --input examples/input.json --outdir out",
+    "demo": "python3 scripts/run_flow.py --demo --outdir out"
+  },
+  "artifacts": [
+    "out/预警推送单.xlsx",
+    "out/推送消息预览.md",
+    "out/alert_flow.json",
+    "out/steps/01-异常检测/异常预警清单.xlsx",
+    "out/steps/01-异常检测/趋势图.png"
+  ],
+  "constraints": {
+    "ai_label_required": true,
+    "human_review_required": true,
+    "external_api_required": false,
+    "no_auto_send": true,
+    "no_reimplement_detection": true,
+    "dedup_window_hours": 12,
+    "escalate_if_no_ack_minutes": 30,
+    "silent_hours": "23:00-07:00",
+    "push_levels": ["高", "中"]
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "store_name": "望京 SOHO 店",
+  "period": {
+    "start": "2026-09-01",
+    "end": "2026-09-30"
+  },
+  "sources": [
+    {
+      "source": "收银系统",
+      "access": "官方API",
+      "authorized": true,
+      "owner": "店长 王敏",
+      "last_sync": "2026-09-30T21:32:00",
+      "expected_fields": [
+        "date",
+        "revenue",
+        "orders",
+        "visitors",
+        "refunds"
+      ],
+      "actual_fields": [
+        "date",
+        "revenue",
+        "orders",
+        "visitors",
+        "refunds"
+      ]
+    },
+    {
+      "source": "美团/点评商家后台",
+      "access": "用户导出",
+      "authorized": true,
+      "owner": "店长 王敏",
+      "last_sync": "2026-09-30T21:40:00",
+      "expected_fields": [
+        "date",
+        "团购核销",
+        "评价数",
+        "评分"
+      ],
+      "actual_fields": [
+        "date",
+        "评价数",
+        "评分"
+      ]
+    },
+    {
+      "source": "抖音开放平台",
+      "access": "官方API",
+      "authorized": false,
+      "owner": "运营 李强",
+      "last_sync": "2026-09-22T20:00:00",
+      "expected_fields": [
+        "date",
+        "团购核销",
+        "视频播放"
+      ],
+      "actual_fields": [
+        "date"
+      ]
+    },
+    {
+      "source": "企业微信",
+      "access": "官方API",
+      "authorized": true,
+      "owner": "运营 李强",
+      "last_sync": "2026-09-30T21:45:00",
+      "expected_fields": [
+        "date",
+        "客户标签"
+      ],
+      "actual_fields": [
+        "date",
+        "客户标签"
+      ]
+    },
+    {
+      "source": "竞品门店客流",
+      "access": "爬取",
+      "authorized": false,
+      "owner": "运营 李强",
+      "last_sync": "2026-09-28T19:00:00",
+      "expected_fields": [
+        "date",
+        "客流估算"
+      ],
+      "actual_fields": [
+        "date",
+        "客流估算"
+      ]
+    }
+  ],
+  "daily_arrival": [
+    {
+      "date": "2026-09-01",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-02",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-03",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-04",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-05",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-06",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-07",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-08",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-09",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-10",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-11",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-12",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-13",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-14",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-15",
+      "arrived": 3,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-16",
+      "arrived": 3,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-17",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-18",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-19",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-20",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-21",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-22",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-23",
+      "arrived": 2,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-24",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-25",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-26",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-27",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-28",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-29",
+      "arrived": 4,
+      "expected": 4
+    },
+    {
+      "date": "2026-09-30",
+      "arrived": 4,
+      "expected": 4
+    }
+  ],
+  "raw_samples": [
+    {
+      "source": "企业微信",
+      "field": "customer_phone",
+      "value": "13800001111"
+    },
+    {
+      "source": "企业微信",
+      "field": "customer_id_card",
+      "value": "110101199003074512"
+    },
+    {
+      "source": "美团/点评商家后台",
+      "field": "customer_name",
+      "value": "张先生"
+    },
+    {
+      "source": "收银系统",
+      "field": "member_address",
+      "value": "北京市朝阳区望京街道 12 号 3 栋 501 室"
+    }
+  ],
+  "collect_policy": {
+    "window": "21:30-21:45",
+    "retry": 2,
+    "on_redline": "停止该源并告警",
+    "gate_downstream": true
+  }
+}

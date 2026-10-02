@@ -1,0 +1,153 @@
+{
+  "skill_id": "de_local_08_sk03",
+  "name": "异常检测",
+  "type": "atomic",
+  "input": {
+    "type": "object",
+    "required": ["store_name", "metrics"],
+    "properties": {
+      "store_name": {
+        "type": "string",
+        "description": "门店名称，用于标题与产物命名"
+      },
+      "category": {
+        "type": "string",
+        "description": "品类，决定行业基准（转化率健康区间 / 退款率上限 / 客单价波动带）",
+        "enum": ["餐饮", "零售", "通用"]
+      },
+      "period": {
+        "type": "object",
+        "description": "统计区间，用于区间内缺失日期检测（缺失不补零）",
+        "properties": {
+          "start": {"type": "string", "description": "起始日期 YYYY-MM-DD"},
+          "end": {"type": "string", "description": "结束日期 YYYY-MM-DD"}
+        }
+      },
+      "opened_date": {
+        "type": "string",
+        "description": "开业日期 YYYY-MM-DD，用于新店 30 天保护期判定"
+      },
+      "promo_days": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "促销日列表 YYYY-MM-DD，命中则不判异常（标特殊期）"
+      },
+      "holidays": {
+        "type": "array",
+        "items": {"type": "string"},
+        "description": "节假日列表 YYYY-MM-DD，命中则不判异常（标特殊期）"
+      },
+      "metrics": {
+        "type": "array",
+        "description": "日经营指标数组，派生指标由脚本计算，不接受用户提供客单价/转化率/退款率",
+        "items": {
+          "type": "object",
+          "required": ["date", "revenue", "orders", "visitors"],
+          "properties": {
+            "date": {"type": "string", "description": "日期 YYYY-MM-DD"},
+            "revenue": {"type": "number", "description": "当日营收（元）"},
+            "orders": {"type": "number", "description": "当日订单数"},
+            "visitors": {"type": "number", "description": "当日访客数，用于算转化率"},
+            "refunds": {"type": "number", "description": "当日退款额（元），用于算退款率"},
+            "last_year_revenue": {"type": "number", "description": "去年同期同日期营收（元），有则启用同比"}
+          }
+        }
+      },
+      "rules": {
+        "type": "object",
+        "description": "规则覆盖，缺省用内置默认值",
+        "properties": {
+          "revenue_dod_drop": {"type": "number", "description": "R1 营收环比跌幅阈值%，默认 20"},
+          "conversion_floor": {"type": "number", "description": "R1 转化率下限%，默认 1.5"},
+          "refund_ceil": {"type": "number", "description": "R1 退款率上限%，默认 5"},
+          "z_k": {"type": "number", "description": "R2 离群倍数，默认 2"},
+          "z_min_sample": {"type": "number", "description": "R2 启用 Z-score 的最小样本天数，默认 14"},
+          "iqr_k": {"type": "number", "description": "R2 小样本 IQR 系数，默认 1.5"},
+          "trend_days": {"type": "number", "description": "R3 连续同向天数，默认 3"},
+          "trend_total_pct": {"type": "number", "description": "R3 累计幅度阈值%，默认 10"},
+          "min_orders": {"type": "number", "description": "小样本失真阈值（单），默认 20"},
+          "new_store_days": {"type": "number", "description": "新店保护期天数，默认 30"}
+        }
+      }
+    }
+  },
+  "output": {
+    "type": "object",
+    "required": ["summary", "alerts", "data_quality"],
+    "properties": {
+      "summary": {
+        "type": "object",
+        "description": "检测概况：样本天数/离群方法/缺失天数/新店保护期/小样本天数/预警总条数/确认异常条数/特殊期拦截条数/行业基准",
+        "properties": {
+          "门店": {"type": "string"},
+          "品类": {"type": "string"},
+          "样本天数": {"type": "integer"},
+          "离群方法": {"type": "string", "description": "Z-score(2σ) 或 IQR(1.5)，按样本量自动切换"},
+          "缺失天数": {"type": "integer"},
+          "新店保护期": {"type": "string", "enum": ["是", "否"]},
+          "小样本天数": {"type": "integer"},
+          "预警总条数": {"type": "integer"},
+          "确认异常条数": {"type": "integer"},
+          "特殊期拦截条数": {"type": "integer"},
+          "涉及天数": {"type": "integer"},
+          "行业转化率健康区间": {"type": "string"},
+          "行业退款率上限": {"type": "string"},
+          "客单价波动正常带": {"type": "string"}
+        }
+      },
+      "alerts": {
+        "type": "array",
+        "description": "预警清单，按级别（高/中/低/拦截）排序",
+        "items": {
+          "type": "object",
+          "properties": {
+            "日期": {"type": "string"},
+            "星期": {"type": "string"},
+            "指标": {"type": "string"},
+            "规则": {"type": "string", "enum": ["R1 绝对阈值", "R2 离群（Z-score(2σ)）", "R2 离群（IQR(1.5)）", "R3 连续趋势", "R4 季节性（同比优先）"]},
+            "级别": {"type": "string", "enum": ["高", "中", "低", "拦截"]},
+            "实际值": {"type": "string"},
+            "阈值/基线": {"type": "string"},
+            "证据": {"type": "string"},
+            "判定": {"type": "string", "description": "确认异常 / 只报值不下结论 / 特殊期，需人工判断"},
+            "星期对齐偏离": {"type": "string"},
+            "周环比": {"type": "string"}
+          }
+        }
+      },
+      "data_quality": {
+        "type": "array",
+        "description": "数据质量问题及处理方式：缺失日期（不补零）/ 新店保护期 / 单日样本量不足",
+        "items": {
+          "type": "object",
+          "properties": {
+            "项": {"type": "string"},
+            "值": {"type": "string"},
+            "明细": {"type": "string"},
+            "处理": {"type": "string"}
+          }
+        }
+      }
+    },
+    "x-rendered-from": "capability:detect"
+  },
+  "scripts": {
+    "detect": "scripts/detect.py",
+    "usage": "python3 scripts/detect.py --input examples/input.json --outdir out",
+    "demo": "python3 scripts/detect.py --demo --outdir out"
+  },
+  "artifacts": [
+    "out/异常预警清单.xlsx",
+    "out/趋势图.png",
+    "out/detect.json"
+  ],
+  "constraints": {
+    "max_input_length": 20000,
+    "forbidden_words": ["最好", "第一", "100%"],
+    "ai_label_required": true,
+    "human_review_required": true,
+    "external_api_required": false,
+    "no_model_calculation": true,
+    "no_zero_filling": true
+  }
+}

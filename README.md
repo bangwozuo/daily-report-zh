@@ -2,8 +2,12 @@
 
 > **每天打烊后一句话告诉老板"今天生意怎么样、明天注意什么"**
 
+![演示](docs/demo.mp4)
+
+*上面是本仓 5 个代表资产的真实执行录屏（数据采集 → 接入体检 → 异常检测 → 日报生成 → 异常预警，每个镜头均为脚本实跑截图）。*
+
 [![Stage](https://img.shields.io/badge/stage-P0-orange)](https://github.com/bangwozuo)
-[![Asset](https://img.shields.io/badge/asset-prompt--only-blueviolet)](#资产形态)
+[![Asset](https://img.shields.io/badge/asset-prompt%20%2B%20script-blueviolet)](#资产形态)
 [![NoKey](https://img.shields.io/badge/API%20Key-not%20required-success)](#资产形态)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
 
@@ -21,18 +25,42 @@
 | 工作流数 | 4 |
 | 旧名存档 | `门店经营日报分析师` |
 
+### 数字员工总览
+
+| 项 | 内容 |
+|---|---|
+| **身份** | 经营日报员——面向餐饮/零售/美业等线下门店，每天 21:30 采集数据、22:00 出日报、越界即预警、周一给方向 |
+| **能力边界** | 做：数据体检归集、异常判定、日报文案、预警编排、周度建议；不做：财务记账、投资级建议、资金操作、替代店主决策 |
+| **工作方式** | 判定归脚本规则引擎（R1 阈值 / R2 离群 / R3 趋势 / R4 同比），表达归模型；所有对外输出保留 🔒 人工确认 |
+| **KPI** | 日报 22:00 准时推送；老板阅读 ≤1 分钟（结论+3 个数+1 个行动）；异常早一天发现 = 少一天失血 |
+| **合规底线** | 只读不写、最小必要、脱敏先拦后取；数据只走官方 API 或用户导出，不爬取私域数据 |
+
+---
+
+## 资产矩阵
+
+| 名称 | 一句话 | 类型 | README |
+|---|---|---|---|
+| 门店数据采集 | 打烊后的数据闸门：合规、完整、干净，BLOCK 时下游不得启动 | 工作流 · T3 | [README](workflows/store-data-collect-flow/README.md) |
+| 门店数据对接 | 数据接入体检：白名单/黑名单 + 字段完整率 + 6 类个人信息脱敏 | 技能 · T4 | [README](skills/store-data-sync/README.md) |
+| 异常检测 | 4 条量化规则 + 5 类假阳性拦截，24 条预警条条带排查方向 | 技能 · T1 | [README](skills/anomaly-detect/README.md) |
+| 日报生成 | 22:00 出日报：一句话结论 + 三个关键数 + 一个行动建议 | 工作流 · T3 | [README](workflows/daily-report-generate-flow/README.md) |
+| 日报文案生成 | 数据转人话：正文 ≤ 200 字，关键数 ≤ 3，结论含方向+幅度+归因 | 技能 · T1 | [README](skills/daily-report-copy/README.md) |
+| 异常预警 | 筛·排·留：级别过滤 + 免打扰 + 30 分钟升级，脚本不自动发送 | 工作流 · T3 | [README](workflows/anomaly-alert-flow/README.md) |
+| 周度经营建议 | 每周一只给一个重点动作：能落地、零预算、一周见反馈 | 工作流 · T3 | [README](workflows/weekly-ops-advice-flow/README.md) |
+
 ---
 
 ## 资产形态
 
-**纯提示词资产** —— 这是理解本仓库的关键：
+**提示词 + 可选脚本** —— 这是理解本仓库的关键：
 
 | 特性 | 说明 |
 |------|------|
-| ✅ 无需 API Key | 一个 Key 都不需要 |
-| ✅ 无需部署 | 没有服务端，没有脚本 |
-| ✅ 无需依赖 | 克隆后用文本编辑器就能看 |
-| ✅ 平台无关 | 粘贴到任何 AI 工具即可使用 |
+| ✅ 无需 API Key | 提示词模式不需要任何密钥，不调用模型 |
+| ✅ 双模式 | 纯提示词粘贴即用；各资产另配确定性 Python 脚本（`--demo` / `--input`），算派生指标、跑判定规则、落盘 Excel/Word/PNG |
+| ✅ 零部署 | 没有服务端；脚本模式需 `pip install -r requirements.txt` |
+| ✅ 平台无关 | Coze / WorkBuddy / Dify / Claude / ChatGPT 均可 |
 | ✅ 用户自备算力 | 模型来自你自己的订阅 |
 
 ---

@@ -21,10 +21,10 @@
     "访客": 25.56,
     "退款额": 3.47
   },
-  "week_alerts": 4,
-  "high_alerts": 2,
-  "focus_action": "让店长 王敏把「2026-09-09 营收连续趋势（连续 4 天下滑）」当作下周第一件事：拉出该指标对应的原始单据逐条核对，先定性再动手。（零预算：不动用投放费用）",
-  "focus_reason": "本周存在 2 条高等级确认异常，优先级最高",
+  "week_alerts": 5,
+  "high_alerts": 1,
+  "focus_action": "让店长 王敏把「2026-09-08 营收环比（-30.0%）」当作下周第一件事：拉出该指标对应的原始单据逐条核对，先定性再动手。（零预算：不动用投放费用）",
+  "focus_reason": "本周存在 1 条高等级确认异常，优先级最高",
   "owner": "店长 王敏",
   "budget_ceiling": 0,
   "actions_count": 1,
@@ -35,5 +35,5 @@
     "chart": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\weekly-ops-advice-flow\\out\\周对比图.png",
     "step1_dir": "C:\\Users\\nsxzy\\WorkBuddy\\2026-09-24-12-12-44\\library\\repos\\daily-report-zh\\workflows\\weekly-ops-advice-flow\\out\\steps\\01-异常检测"
   },
-  "generated_at": "2026-09-30 20:17:52"
+  "generated_at": "2026-10-03 08:21:14"
 }

@@ -3,11 +3,11 @@
   "store_name": "望京 SOHO 店",
   "period": {
     "start": "2026-09-01",
-    "end": "2026-09-30"
+    "end": "2026-09-17"
   },
-  "detected": 24,
-  "pushed": 14,
-  "suppressed": 10,
+  "detected": 7,
+  "pushed": 6,
+  "suppressed": 1,
   "silent_now": false,
   "push_mode": "立即推送",
   "on_call": "店长 王敏 138****1111",
@@ -22,5 +22,5 @@
       "趋势图.png"
     ]
   },
-  "generated_at": "2026-09-30 20:17:42"
+  "generated_at": "2026-10-03 08:20:46"
 }

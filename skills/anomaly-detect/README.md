@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：29 天指标（缺 1 天，未补零）命中 24 条预警（确认异常 18 / 只报值 4 / 特殊期拦截 2），总营收 272,913 元，产物落盘 Excel + PNG + JSON。*
 
 ---

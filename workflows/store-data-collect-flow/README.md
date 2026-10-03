@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：5 个数据源归集体检——门禁判定 **BLOCK**（"竞品门店客流"走爬取命中红线，禁止进入下游），断供 3 天，脱敏红线 4 条，`downstream_allowed = false`。*
 
 ---

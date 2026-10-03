@@ -7,6 +7,8 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
+![演示视频](docs/assets/demo.mp4)
+
 *上图来自真实执行：望京 SOHO 店 2026-09-12（周六）数据，结论「今天掉了，营收 ¥6,895，比上周同星期少 38.9%」，关键数挑了正好 3 个，产物落盘 Word + Excel + JSON。*
 
 ---

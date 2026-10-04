@@ -7,7 +7,7 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-![演示视频](docs/assets/demo.mp4)
+🎬 **[▶ 观看演示视频](docs/assets/demo.mp4)** — 四幕流转叙事：业务钩子 → 真实执行 → 数据管线节点动画 → 交付物
 
 *上图来自真实执行：5 个数据源归集体检——门禁判定 **BLOCK**（"竞品门店客流"走爬取命中红线，禁止进入下游），断供 3 天，脱敏红线 4 条，`downstream_allowed = false`。*
 

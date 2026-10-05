@@ -7,7 +7,9 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-🎬 **[▶ 观看演示视频（在线播放）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/skills/store-data-sync/docs/assets/demo.mp4) · [GitHub 页](https://github.com/bangwozuo/daily-report-zh/blob/main/skills/store-data-sync/docs/assets/demo.mp4)** — 四幕检测叙事：业务钩子 → 真实执行 → 检查项逐条亮灯 → 交付物
+![演示](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/skills/store-data-sync/docs/assets/demo.gif)
+
+🎬 **[▶ 观看高清完整版（mp4）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/skills/store-data-sync/docs/assets/demo.mp4)** — 四幕检测叙事：业务钩子 → 真实执行 → 检查项逐条亮灯 → 交付物
 
 *上图来自真实执行：5 个数据源体检——正常 2 / 未授权或字段不全 2 / **红线 1**（"竞品门店客流"走爬取，命中黑名单即剔除），合规源平均字段完整率 77.1%，断供 3 天，脱敏红线 4 条。*
 

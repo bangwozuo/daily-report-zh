@@ -7,7 +7,9 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-🎬 **[▶ 观看演示视频（在线播放）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/anomaly-alert-flow/docs/assets/demo.mp4) · [GitHub 页](https://github.com/bangwozuo/daily-report-zh/blob/main/workflows/anomaly-alert-flow/docs/assets/demo.mp4)** — 四幕创作叙事：业务钩子 → 真实执行 → 要点到成稿演变 → 交付物
+![演示](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/anomaly-alert-flow/docs/assets/demo.gif)
+
+🎬 **[▶ 观看高清完整版（mp4）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/anomaly-alert-flow/docs/assets/demo.mp4)** — 四幕创作叙事：业务钩子 → 真实执行 → 要点到成稿演变 → 交付物
 
 *上图来自真实执行：2026-09-01~17 区间检测 **7** 条，推送 **6** 条，抑制 **1** 条（09-10 促销日离群，"仅记录不推送"），立即推送模式，值班人店长王敏。*
 

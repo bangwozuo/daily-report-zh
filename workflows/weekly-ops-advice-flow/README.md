@@ -7,7 +7,9 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-🎬 **[▶ 观看演示视频（在线播放）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/weekly-ops-advice-flow/docs/assets/demo.mp4) · [GitHub 页](https://github.com/bangwozuo/daily-report-zh/blob/main/workflows/weekly-ops-advice-flow/docs/assets/demo.mp4)** — 四幕创作叙事：业务钩子 → 真实执行 → 要点到成稿演变 → 交付物
+![演示](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/weekly-ops-advice-flow/docs/assets/demo.gif)
+
+🎬 **[▶ 观看高清完整版（mp4）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/weekly-ops-advice-flow/docs/assets/demo.mp4)** — 四幕创作叙事：业务钩子 → 真实执行 → 要点到成稿演变 → 交付物
 
 *上图来自真实执行：2026-09-07~13 周报——周营收 66,268 元（周环比 -16.0%），本周 5 条确认异常（高 1 条），按优先级第 1 条命中，收敛到唯一动作「拉出 09-08 营收环比 -30.0% 的原始单据逐条核对，先定性再动手（零预算）」。*
 

@@ -7,7 +7,9 @@
 
 ![真实执行](docs/assets/run-terminal.png)
 
-🎬 **[▶ 观看演示视频（在线播放）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/daily-report-generate-flow/docs/assets/demo.mp4) · [GitHub 页](https://github.com/bangwozuo/daily-report-zh/blob/main/workflows/daily-report-generate-flow/docs/assets/demo.mp4)** — 四幕数据叙事：业务钩子 → 真实执行 → 指标条形图生长 → 交付物
+![演示](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/daily-report-generate-flow/docs/assets/demo.gif)
+
+🎬 **[▶ 观看高清完整版（mp4）](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/workflows/daily-report-generate-flow/docs/assets/demo.mp4)** — 四幕数据叙事：业务钩子 → 真实执行 → 指标条形图生长 → 交付物
 
 *上图来自真实执行：2026-09-13（周日）日报——「今天稳，营收 ¥12,018，比上周同星期多 3.4%，指标落在正常波动带内」，当日 0 条确认异常，关键数正好 3 个，产物落盘 Word + Excel。*
 

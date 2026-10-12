@@ -157,3 +157,11 @@ python3 <FLOW_DIR>/scripts/run_flow.py --demo --outdir out
 ---
 
 *本复合技能遵循 [bangwozuo 数字员工资产规范](https://github.com/bangwozuo/digital-employee-spec) v3.0*
+
+## 输出规格（字段清单）
+
+| 字段 | 说明 |
+|------|------|
+| `summary` | 执行摘要 |
+| `steps` | 分步结果 |
+| `deliverable` | 最终交付物 |

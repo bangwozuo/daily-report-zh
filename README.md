@@ -2,9 +2,9 @@
 
 > **每天打烊后一句话告诉老板"今天生意怎么样、明天注意什么"**
 
-![演示](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/docs/assets/hero.gif)
+![经营日报员 · 动态演示](docs/assets/hero.gif)
 
-*▲ 实时演示（自动循环）· [▶ 观看完整版合集视频](https://cdn.jsdelivr.net/gh/bangwozuo/daily-report-zh@main/docs/demo.mp4)*
+*▲ 真实执行录播（自动循环播放）· [▶ 观看完整版合集视频](docs/demo.mp4)*
 
 *上面是本仓 5 个代表资产的真实执行录屏（数据采集 → 接入体检 → 异常检测 → 日报生成 → 异常预警，每个镜头均为脚本实跑截图）。*
 
@@ -36,20 +36,6 @@
 | **工作方式** | 判定归脚本规则引擎（R1 阈值 / R2 离群 / R3 趋势 / R4 同比），表达归模型；所有对外输出保留 🔒 人工确认 |
 | **KPI** | 日报 22:00 准时推送；老板阅读 ≤1 分钟（结论+3 个数+1 个行动）；异常早一天发现 = 少一天失血 |
 | **合规底线** | 只读不写、最小必要、脱敏先拦后取；数据只走官方 API 或用户导出，不爬取私域数据 |
-
----
-
-## 资产矩阵
-
-| 名称 | 一句话 | 类型 | README |
-|---|---|---|---|
-| 门店数据采集 | 打烊后的数据闸门：合规、完整、干净，BLOCK 时下游不得启动 | 工作流 · T3 | [README](workflows/store-data-collect-flow/README.md) |
-| 门店数据对接 | 数据接入体检：白名单/黑名单 + 字段完整率 + 6 类个人信息脱敏 | 技能 · T4 | [README](skills/store-data-sync/README.md) |
-| 异常检测 | 4 条量化规则 + 5 类假阳性拦截，24 条预警条条带排查方向 | 技能 · T1 | [README](skills/anomaly-detect/README.md) |
-| 日报生成 | 22:00 出日报：一句话结论 + 三个关键数 + 一个行动建议 | 工作流 · T3 | [README](workflows/daily-report-generate-flow/README.md) |
-| 日报文案生成 | 数据转人话：正文 ≤ 200 字，关键数 ≤ 3，结论含方向+幅度+归因 | 技能 · T1 | [README](skills/daily-report-copy/README.md) |
-| 异常预警 | 筛·排·留：级别过滤 + 免打扰 + 30 分钟升级，脚本不自动发送 | 工作流 · T3 | [README](workflows/anomaly-alert-flow/README.md) |
-| 周度经营建议 | 每周一只给一个重点动作：能落地、零预算、一周见反馈 | 工作流 · T3 | [README](workflows/weekly-ops-advice-flow/README.md) |
 
 ---
 
@@ -138,9 +124,9 @@ daily-report-zh/
 
 | # | 技能 | 能力族 | 复杂度 | 提示词 | 文档 |
 |---|------|--------|--------|--------|------|
-| 1 | 门店数据对接 | 文案生成 | `M` | [prompt.txt](skills/store-data-sync/prompt.txt) | [docs](skills/store-data-sync/docs/) |
-| 2 | 日报文案生成 | 上架优化 | `S` | [prompt.txt](skills/daily-report-copy/prompt.txt) | [docs](skills/daily-report-copy/docs/) |
-| 3 | 异常检测 | 文案生成 | `S` | [prompt.txt](skills/anomaly-detect/prompt.txt) | [docs](skills/anomaly-detect/docs/) |
+| 1 | 门店数据对接 | 连接器数据读写 | `M` | [prompt.txt](skills/store-data-sync/prompt.txt) | [docs](skills/store-data-sync/docs/) |
+| 2 | 日报文案生成 | 报告与简报 | `S` | [prompt.txt](skills/daily-report-copy/prompt.txt) | [docs](skills/daily-report-copy/docs/) |
+| 3 | 异常检测 | 异动检测与预警 | `S` | [prompt.txt](skills/anomaly-detect/prompt.txt) | [docs](skills/anomaly-detect/docs/) |
 
 ## 工作流清单（4 条）
 

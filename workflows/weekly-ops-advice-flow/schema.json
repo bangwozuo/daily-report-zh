@@ -1,4 +1,5 @@
 {
+  "skill_id": "weekly-ops-advice-flow",
   "workflow_id": "de_local_08_wf04",
   "name": "周度经营建议",
   "type": "composite",
@@ -42,6 +43,7 @@
   },
   "constraints": {
     "ai_label_required": true,
-    "human_review_required": true
+    "human_review_required": true,
+    "external_api_required": false
   }
 }

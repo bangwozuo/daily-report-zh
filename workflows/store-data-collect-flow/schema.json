@@ -1,4 +1,5 @@
 {
+  "skill_id": "store-data-collect-flow",
   "workflow_id": "de_local_08_wf01",
   "name": "门店数据采集",
   "type": "composite",
@@ -41,6 +42,7 @@
   },
   "constraints": {
     "ai_label_required": true,
-    "human_review_required": true
+    "human_review_required": true,
+    "external_api_required": false
   }
 }

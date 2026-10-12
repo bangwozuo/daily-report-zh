@@ -122,20 +122,20 @@ daily-report-zh/
 
 ## 技能清单（3 个）
 
-| # | 技能 | 能力族 | 复杂度 | 提示词 | 文档 |
-|---|------|--------|--------|--------|------|
-| 1 | 门店数据对接 | 连接器数据读写 | `M` | [prompt.txt](skills/store-data-sync/prompt.txt) | [docs](skills/store-data-sync/docs/) |
-| 2 | 日报文案生成 | 报告与简报 | `S` | [prompt.txt](skills/daily-report-copy/prompt.txt) | [docs](skills/daily-report-copy/docs/) |
-| 3 | 异常检测 | 异动检测与预警 | `S` | [prompt.txt](skills/anomaly-detect/prompt.txt) | [docs](skills/anomaly-detect/docs/) |
+| # | 技能 | 能力族 | 复杂度 | 说明文档 |
+|---|------|--------|--------|----------|
+| 1 | 门店数据对接 | 连接器数据读写 | `M` | [README](skills/store-data-sync/README.md) |
+| 2 | 日报文案生成 | 报告与简报 | `S` | [README](skills/daily-report-copy/README.md) |
+| 3 | 异常检测 | 异动检测与预警 | `S` | [README](skills/anomaly-detect/README.md) |
 
 ## 工作流清单（4 条）
 
-| # | 工作流 | 阶段 | 复杂度 | 触发 | 定义 | 文档 |
-|---|--------|------|--------|------|------|------|
-| 1 | 门店数据采集 | `P0` | `M` | 定时（每日 21:30） | [SKILL.md](workflows/store-data-collect-flow/SKILL.md) | [docs](workflows/store-data-collect-flow/docs/) |
-| 2 | 日报生成 | `P0` | `S` | 定时（每日 22:00） | [SKILL.md](workflows/daily-report-generate-flow/SKILL.md) | [docs](workflows/daily-report-generate-flow/docs/) |
-| 3 | 异常预警 | `P0` | `S` | 事件（指标越界） | [SKILL.md](workflows/anomaly-alert-flow/SKILL.md) | [docs](workflows/anomaly-alert-flow/docs/) |
-| 4 | 周度经营建议 | `P1` | `S` | 定时（每周一） | [SKILL.md](workflows/weekly-ops-advice-flow/SKILL.md) | [docs](workflows/weekly-ops-advice-flow/docs/) |
+| # | 工作流 | 阶段 | 复杂度 | 触发 | 说明文档 |
+|---|--------|------|--------|------|----------|
+| 1 | 门店数据采集 | `P0` | `M` | 定时（每日 21:30） | [README](workflows/store-data-collect-flow/README.md) |
+| 2 | 日报生成 | `P0` | `S` | 定时（每日 22:00） | [README](workflows/daily-report-generate-flow/README.md) |
+| 3 | 异常预警 | `P0` | `S` | 事件（指标越界） | [README](workflows/anomaly-alert-flow/README.md) |
+| 4 | 周度经营建议 | `P1` | `S` | 定时（每周一） | [README](workflows/weekly-ops-advice-flow/README.md) |
 
 ---
 

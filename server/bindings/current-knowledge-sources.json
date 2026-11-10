@@ -2,7 +2,7 @@
   {
     "id": "alert_policy",
     "title": "本店预警静默、去重及升级配置",
-    "source_file": "knowledge\\published\\alert_policy.md",
+    "source_file": "knowledge/published/alert_policy.md",
     "source_sha256": "6e7287051f68150a88be37cc536727bed278013eb021315a2938503d793162c6",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -13,7 +13,7 @@
   {
     "id": "detection_rules",
     "title": "四规则检测与假阳性拦截规范",
-    "source_file": "knowledge\\published\\detection_rules.md",
+    "source_file": "knowledge/published/detection_rules.md",
     "source_sha256": "90abeaed85c7ca7e30b55ce103a353aeba42d1b7da64bf4c2f0a19f531bacd79",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -24,7 +24,7 @@
   {
     "id": "metric_contract",
     "title": "本店经营导出字段与核算口径合同",
-    "source_file": "knowledge\\published\\metric_contract.md",
+    "source_file": "knowledge/published/metric_contract.md",
     "source_sha256": "cd3e2b6b20097adbb61f657f89582e9ff6dbf3c46e4d6781224e330f3e7b07ba",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -35,7 +35,7 @@
   {
     "id": "privacy_release",
     "title": "经营数据最小化与人工交付规范核验",
-    "source_file": "knowledge\\published\\privacy_release.md",
+    "source_file": "knowledge/published/privacy_release.md",
     "source_sha256": "fe5a781a7082abb2a250ab9b462c0272a1fde548f9d44842ea8189edd5659f1a",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -46,7 +46,7 @@
   {
     "id": "report_template",
     "title": "经营日报可编辑交付与证据表达模板",
-    "source_file": "knowledge\\published\\report_template.md",
+    "source_file": "knowledge/published/report_template.md",
     "source_sha256": "9ab4b6ccbbd30a47901f72408aa5a8e1a32f90c08a4d59710864403972d4253c",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -57,7 +57,7 @@
   {
     "id": "source_register",
     "title": "客户数据源授权与到数责任台账",
-    "source_file": "knowledge\\published\\source_register.md",
+    "source_file": "knowledge/published/source_register.md",
     "source_sha256": "83215ac840ca92bd9685fc1d9abdd77056d980ffeffd38d50851f7e5089abe70",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -68,7 +68,7 @@
   {
     "id": "store_context",
     "title": "本店特殊期、历史参照与行动约束",
-    "source_file": "knowledge\\published\\store_context.md",
+    "source_file": "knowledge/published/store_context.md",
     "source_sha256": "ee290de3010cce5d08d1f76d4aea2bb658ea79e79aef486a3f72606ba06bfe87",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,
@@ -79,7 +79,7 @@
   {
     "id": "weekly_method",
     "title": "周汇总星期结构与单行动优先级",
-    "source_file": "knowledge\\published\\weekly_method.md",
+    "source_file": "knowledge/published/weekly_method.md",
     "source_sha256": "7e03620d1e8923e5943e61b2fb8e3a51afe7a359c211bd5be1abe5e3cb5cfc54",
     "original_seed_license_ref": "frozen-source-LICENSE:bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0;internal-validation-not-distribution-approval",
     "current_classification_present": false,

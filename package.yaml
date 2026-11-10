@@ -1,11 +1,62 @@
 name: 经营日报员
 repo: bangwozuo/daily-report-zh
+legacy_name: 门店经营日报分析师
 version: 0.2.0-rc.1
-license: Apache-2.0
 asset_type: agent
 stage: acceptance
+complexity: '**S**（Mock 形态纯提示词）'
+group: 本地生活商家
+runtime_dependencies:
+- existing-native-workflow-service
+- versioned-knowledge-service
+- audited-script-execution
+api_key_required: false
+demand_ids: &id001
+- D02
+- D06
+- D27
+workflows: &id002
+- name: 门店数据采集
+  id: de_local_08_wf01
+- name: 日报生成
+  id: de_local_08_wf02
+- name: 异常预警
+  id: de_local_08_wf03
+- name: 周度经营建议
+  id: de_local_08_wf04
+skills: &id003
+- id: store-data-sync
+  name: 门店数据对接
+  family: null
+- id: daily-report-copy
+  name: 日报文案生成
+  family: null
+- id: anomaly-detect
+  name: 异常检测
+  family: null
+compliance: &id004
+  ai_label_required: true
+  human_review_required: true
+  forbidden_words_check: true
+  official_api_only: true
+license: Apache-2.0
 employee: lib/employee.json
 main_skill: clients/skill/daily-report-zh/SKILL.md
 runtime:
   business_framework: source-quote-compatible
   target: deepagents
+legacy_package_definition:
+  name: 经营日报员
+  repo: bangwozuo/daily-report-zh
+  legacy_name: 门店经营日报分析师
+  version: 0.2.0
+  asset_type: prompt-only
+  stage: P0
+  complexity: '**S**（Mock 形态纯提示词）'
+  group: 本地生活商家
+  runtime_dependencies: none
+  api_key_required: false
+  demand_ids: *id001
+  workflows: *id002
+  skills: *id003
+  compliance: *id004

@@ -194,7 +194,16 @@
       "prompt.txt",
       "scripts/product.py",
       "LICENSE",
-      "NOTICE"
+      "NOTICE",
+      "native-schema.json",
+      "native-prompt.txt"
     ]
+  },
+  "source_interface": {
+    "schema": "schema.json",
+    "prompt": "prompt.txt",
+    "native_schema": "native-schema.json",
+    "native_prompt": "native-prompt.txt",
+    "legacy_source_unchanged": true
   }
 }

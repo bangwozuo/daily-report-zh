@@ -1,0 +1,27 @@
+{
+  "files": {
+    "lib/assettools.py": "3dc8ab8f088e1950818012dd05637e3736406808fd132c46727ca7c8f0696d5d",
+    "runtime/domain.py": "9bc6bcaac11ea8fa4971f34b8e3db1560689c2156d4b615406c3c4c2b8e45618",
+    "runtime/operations.py": "c40a0d0a0d4c5ea4d67174e63ba867de1e6343b4e4780de546a91c511e91bca9",
+    "runtime/test_domain.py": "753a6dce4ba4b3fd83a2c07ba18c437beec0bbe856f128df96b0e29115aff39a",
+    "runtime/test_operations.py": "713bda2001a3457115519203fd911ed5a7b560447e6da5956b2a58405ea5189a",
+    "clients/sdk/daily.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "clients/skill/daily-report-zh/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "skills/anomaly-detect/scripts/detect.py": "9211f9633718c2ef2092075874a924b9d3441760b0f1d893326ad9fdfa7775fd",
+    "skills/anomaly-detect/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "skills/daily-report-copy/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "skills/daily-report-copy/scripts/report_copy.py": "60dd8c6e215355cf0c85daad95c54b5b7438be853acf4d4f4c28d340ba863674",
+    "skills/store-data-sync/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "skills/store-data-sync/scripts/sync.py": "9b91b39929ceb56b6d911bf40a1bb6647fb5f675fbe9f6d4f22e3ac0d7c59b0b",
+    "workflows/anomaly-alert-flow/scripts/run_flow.py": "ebd24fdea92f290d55a14390e800af9b78b1a8ec339115040e27a5caf50e7907",
+    "workflows/call-daily-alert/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "workflows/call-daily-collect/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "workflows/call-daily-generate/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "workflows/call-daily-weekly/scripts/product.py": "5785057e24b786f0669231603fad0a7e22980ee2618bb0e2e122207b1d7f1129",
+    "workflows/daily-report-generate-flow/scripts/run_flow.py": "faa6117c41980467f083792cf4762a1c8d507b73652459b0d48681cdaadbeb2e",
+    "workflows/store-data-collect-flow/scripts/run_flow.py": "64664c47f27cec03c1f460093bc5d0505ee2d7da8b53119810c1d3a5ff3c7122",
+    "workflows/weekly-ops-advice-flow/scripts/run_flow.py": "767ceea3b5f79175ca4a709fb50cdfbbdc290654d879bcd1fca7cb4dc8a5b264"
+  },
+  "automatic_host_import": false,
+  "source_scripts_require_explicit_user_execution": true
+}

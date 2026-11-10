@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "scope": "current original source compatibility and declared native distribution; no provider/business replay",
+  "tests": 95,
+  "failures": 0,
+  "errors": 0,
+  "source_package_sha256": "5756b47e2a4fb09ab41bb8419ebd6a5a377af16675cd7505a08267082c52113f",
+  "parent_sha256": "810ee0347f2291286b9bda1852bd07d2f1e81c8f4494c700c4f945cf1b499b9b",
+  "isolation_sha256": "905a8e54f91dd79a907aa9903ce153a5f8d89d10829480f3e289e4cf0591e1f6",
+  "pytest_xml_sha256": "14bc1877942578445af5eca8c14fad338e34fcbcfadc5e818a4881fa9e1372ad",
+  "cleanup_confirmed": true,
+  "network": "denied",
+  "models": 0,
+  "full_191_release_accepted": false,
+  "old_failures_retained": true
+}

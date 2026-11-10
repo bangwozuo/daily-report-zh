@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import hashlib
 
 import pytest
 
@@ -179,15 +180,10 @@ def test_no_api_key_leaked():
             assert not m, f"{f} 疑似泄漏密钥: {m.group(0)[:20]}"
 
 
-def test_no_executable_scripts():
-    """纯提示词资产不应包含 .py 实现脚本（测试文件除外）。"""
-    forbidden = []
-    for f in REPO_ROOT.rglob("*.py"):
-        rel = f.relative_to(REPO_ROOT)
-        parts = rel.parts
-        if "tests" in parts:
-            continue
-        if f.name in ("conftest.py",):
-            continue
-        forbidden.append(str(rel))
-    assert not forbidden, f"发现不应存在的实现脚本: {forbidden}"
+def test_declared_executable_sources():
+    """Native Agent source has explicit Python inventory; no undeclared script."""
+    inventory=json.loads((REPO_ROOT/'server/bindings/script-inventory.json').read_text('utf-8'))
+    actual={p.relative_to(REPO_ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()
+            for p in REPO_ROOT.rglob('*.py')if 'tests'not in p.relative_to(REPO_ROOT).parts and '.git'not in p.parts}
+    assert actual==inventory['files']
+    assert inventory['automatic_host_import'] is False

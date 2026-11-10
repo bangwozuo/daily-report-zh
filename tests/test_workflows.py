@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import re
+import json
 from pathlib import Path
 
 import pytest
@@ -28,7 +29,7 @@ REQUIRED_SECTIONS = [
 def all_flow_dirs():
     if not WORKFLOWS_DIR.exists():
         return []
-    return sorted(d for d in WORKFLOWS_DIR.iterdir() if d.is_dir())
+    return sorted(d for d in WORKFLOWS_DIR.iterdir() if d.is_dir() and not d.name.startswith('de_local_08_') and not ((d/'definition.json').is_file() and json.loads((d/'definition.json').read_text(encoding='utf-8')).get('kind')=='workflow_call'))
 
 
 def atomic_names():

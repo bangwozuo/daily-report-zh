@@ -1,0 +1,37 @@
+{
+  "id": "daily-report-zh:skill:store-data-sync",
+  "original_id": "store-data-sync",
+  "version": "1.0.0",
+  "purpose": "对客户授权经营导出的来源、字段映射、到数覆盖及个人信息风险形成接入体检，不冒充实际连接器。",
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "skills/store-data-sync/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a"
+  },
+  "source_text_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a",
+  "production_form": "combination",
+  "conditions": [
+    "需要来源、接入方式、授权、责任人、最近同步、应到/实到字段、每日到数和经预处理抽样。",
+    "原能力包括缺字段降级路径、授权巡检及脱敏字段实际剔除；本次只能分析义务，不执行删除或外部接入。",
+    "估算降级与下游禁止估算冲突须返回父任务确认，估算值不得冒充真实经营实绩。"
+  ],
+  "acceptance": [
+    "四类校验分别有证据：字段低于80%提示、低于50%源不可用；连续两天断供提醒，不补零。",
+    "六类个人信息在入库前拦截；红线源下游前剔除，未授权不得采集，超过24小时同步仅提示可能到期，不冒充真实授权验证。",
+    "交付五页签接入清单、完整率及到数两张PNG、sync.json；每个缺字段列实际下游影响和可行补齐路径。",
+    "保留21:30收数、21:35校验、21:40脱敏、21:45交付、周一授权巡检及月初字段集复盘责任点。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:source_register",
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:privacy_release"
+  ],
+  "runtime_binding": "pending_actual_production",
+  "content_acceptance": "pending_actual_consumer_and_original_review"
+}

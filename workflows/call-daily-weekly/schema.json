@@ -1,0 +1,101 @@
+{
+  "input": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "const": "weekly"
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  }
+}

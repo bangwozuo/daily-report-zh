@@ -1,0 +1,50 @@
+{
+  "key": "detection_rules",
+  "title": "四规则检测与假阳性拦截规范",
+  "kind": "specification",
+  "supply": "source_supported",
+  "consumers": [
+    "d4",
+    "d7",
+    "d8",
+    "d10"
+  ],
+  "content_requirements": [
+    "从d4提取R1至R4公式、样本回退、星期对齐、同比冲突优先级、缺日断链、特殊期和小样本拦截及级别处置。",
+    "每条结果保存指标、日期、基线、实际值、规则版本、判定与排查项；须向父任务补取schema和脚本，核实边界值、统计窗口及行业基准实现。",
+    "源中行业范围与周末波动比例仅作待验证参考，不作为已验证普适事实。"
+  ],
+  "evidence": {
+    "source_key": "d4",
+    "quote": "同比与环比冲突时以同比为准"
+  },
+  "id": "daily-report-zh:knowledge:detection_rules",
+  "normalized_kind": "specification",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "四规则检测与假阳性拦截规范",
+    "kind": "specification",
+    "actual_source_context": [
+      "1. **R1 绝对阈值** —— 营收环比 ≤ -20%、转化率 < 1.5%、退款率 > 5%\n2. **R2 离群** —— `|x-μ| > 2σ`；样本 < 14 天时自动回退 IQR(1.5)，因标准差在小样本上不稳定\n3. **R3 连续趋势** —— 连续 ≥ 3 天同向且累计幅度 > 10%，单日波动不算趋势\n4. **R4 季节性** —— 有去年同期用同比；**同比与环比冲突时以同比为准**并标注冲突"
+    ],
+    "required_business_fields": [
+      "从d4提取R1至R4公式、样本回退、星期对齐、同比冲突优先级、缺日断链、特殊期和小样本拦截及级别处置。",
+      "每条结果保存指标、日期、基线、实际值、规则版本、判定与排查项；须向父任务补取schema和脚本，核实边界值、统计窗口及行业基准实现。",
+      "源中行业范围与周末波动比例仅作待验证参考，不作为已验证普适事实。"
+    ],
+    "consumers": [
+      "d4",
+      "d7",
+      "d8",
+      "d10"
+    ],
+    "supply": "source_supported",
+    "epistemic_state": "source_method_pending_applicability_review",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

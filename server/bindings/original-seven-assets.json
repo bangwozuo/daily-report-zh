@@ -1,0 +1,65 @@
+[
+  {
+    "production_run_id": "run_0936f0e488a4464799d5",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "5d3b7915586a4b4ef24a3812c64c0779f90b297d25242984d2dc0c3f60ac3786",
+    "test_plan_sha256": "d9626926358a99f3c7b20853a38b3e447ed0b05179451a0c1f51ab4ce4a89f17",
+    "id": "daily-report-zh:skill:store-data-sync",
+    "source_key": "d6",
+    "action": "sync"
+  },
+  {
+    "production_run_id": "run_da1cbba3982e4f03a992",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "1624abb724f118cf960925b4ebb29ba35c6e4c48d49295c3ae42d8bce97f77fc",
+    "test_plan_sha256": "2be764743429ecf5d27c9d1690c12aac10d2026c217964b1cd48e73e848c5a67",
+    "id": "daily-report-zh:skill:anomaly-detect",
+    "source_key": "d4",
+    "action": "detect"
+  },
+  {
+    "production_run_id": "run_88d162688cd34bd1a979",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "34278d17c5b51b347a45224ab5a3b5a1b35c0f099080ff5b7576f28073f1ecf5",
+    "test_plan_sha256": "f1ea626598e5de8a31c67f8fad092d3619d452d17bfd46f49c706c70d5748647",
+    "id": "daily-report-zh:skill:daily-report-copy",
+    "source_key": "d5",
+    "action": "copy"
+  },
+  {
+    "production_run_id": "run_bcde82f6c9cb4786b002",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "9fcf0ef2e8051a47c4c1a48a5b90f63101f6a8003b95d9cbfc105829d416b08f",
+    "test_plan_sha256": "af459ffb3f9f066e4876c7b50a83ea914e4c2634061a704ef40658ef9146b12f",
+    "id": "daily-report-zh:workflow:de_local_08_wf01",
+    "source_key": "d9",
+    "action": "collect"
+  },
+  {
+    "production_run_id": "run_a0f8902fa30942248045",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "595ee2f201670d506633080d44ae2b357e50d80d95129d103b840be702d943f8",
+    "test_plan_sha256": "8193dae207ca887e5b49490d5be1fd26987dd5b5728ae56651abe14ccc0b1405",
+    "id": "daily-report-zh:workflow:de_local_08_wf02",
+    "source_key": "d8",
+    "action": "daily"
+  },
+  {
+    "production_run_id": "run_91d0cbef0b8949debae7",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "6319bd4d15a40d1c9c4840729eaee1b635476a41338b36d298ad5751a46299d1",
+    "test_plan_sha256": "cbe679bc98f72683479b009318e01959dc40f535e725ad875fa91c3545473f04",
+    "id": "daily-report-zh:workflow:de_local_08_wf03",
+    "source_key": "d7",
+    "action": "alert"
+  },
+  {
+    "production_run_id": "run_35a2c2f0040d4aa79698",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "aee7bb525797ef92083783632b59792242144c34777a29c56ce04939571da087",
+    "test_plan_sha256": "a2e6208a5609dfd49c7c67b83ca5c96c841e53178f211203ab3b1545eb67570a",
+    "id": "daily-report-zh:workflow:de_local_08_wf04",
+    "source_key": "d10",
+    "action": "weekly"
+  }
+]

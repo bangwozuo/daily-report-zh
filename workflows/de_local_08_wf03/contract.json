@@ -1,0 +1,37 @@
+{
+  "id": "daily-report-zh:workflow:de_local_08_wf03",
+  "original_id": "de_local_08_wf03",
+  "version": "1.0.0",
+  "purpose": "将检测证据编排为分级预警清单、抑制台账与待人工确认的消息预览，保留后续推送升级义务。",
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "workflows/anomaly-alert-flow/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "134c593686d270b495f9b912ed211b8ce7e21ad0e5083900b1c8e025b146f875"
+  },
+  "source_text_sha256": "134c593686d270b495f9b912ed211b8ce7e21ad0e5083900b1c8e025b146f875",
+  "production_form": "workflow",
+  "conditions": [
+    "指标越界或每日21:50触发须由外部调度提供；先取得采集门禁和真实detect.json。",
+    "需要客户级渠道、值班人、免打扰、去重窗口及超时升级策略；无渠道配置不视默认机器人可用。",
+    "当前不发送、不升级、不启动定时任务；实际送达和确认回执均缺失。"
+  ],
+  "acceptance": [
+    "仅确认异常按级别入候选清单；拦截、只报值、级别不足、默认12小时同指标去重均留抑制原因。",
+    "静默时段挂起至次日07:00；默认30分钟未确认升级负责人，仍未确认只留痕，发送失败待人工补发。",
+    "交付预警推送单.xlsx、推送消息预览.md、alert_flow.json及检测原产物；每条含日期、指标、实际值、证据和升级期限。",
+    "pushed仅表示进入推送清单，不作为真实送达数；脚本不得自动发送，人工确认不可省略。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:detection_rules",
+    "daily-report-zh:knowledge:alert_policy",
+    "daily-report-zh:knowledge:privacy_release"
+  ],
+  "runtime_binding": "pending_actual_production",
+  "content_acceptance": "pending_actual_consumer_and_original_review"
+}

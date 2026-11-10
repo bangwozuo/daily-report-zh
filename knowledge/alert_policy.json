@@ -1,0 +1,42 @@
+{
+  "key": "alert_policy",
+  "title": "本店预警静默、去重及升级配置",
+  "kind": "customer_fact",
+  "supply": "customer_configuration",
+  "consumers": [
+    "d7"
+  ],
+  "content_requirements": [
+    "由门店负责人提供push_levels、channels、silent_hours、on_call、dedup_window_hours及escalate_if_no_ack_minutes。",
+    "补齐时区、去重持久化键、确认回执、负责人替补和失败补发责任；默认12小时、30分钟及07:00汇总须经客户确认，不代表连接已开通。"
+  ],
+  "evidence": {
+    "source_key": "d7",
+    "quote": "同指标在去重窗口内不重复打扰"
+  },
+  "id": "daily-report-zh:knowledge:alert_policy",
+  "normalized_kind": "template",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "本店预警静默、去重及升级配置",
+    "kind": "template",
+    "actual_source_context": [
+      "1. **判定**：调用 `anomaly-detect` 的四规则引擎（含促销日/节假日/小样本/缺失日期的假阳性拦截）\n2. **编排**：按推送级别过滤，特殊期与只报值项**只记录不推送**；同指标在去重窗口内不重复打扰\n3. **门控**：免打扰时段内不立即推送，改为次日 07:00 汇总\n4. **交付**：产出《预警推送单》（Excel）+ 推送消息预览（Markdown），并**保留人工确认环节**\n5. **升级**：设定「N 分钟未确认即升级」的兜底规则"
+    ],
+    "required_business_fields": [
+      "由门店负责人提供push_levels、channels、silent_hours、on_call、dedup_window_hours及escalate_if_no_ack_minutes。",
+      "补齐时区、去重持久化键、确认回执、负责人替补和失败补发责任；默认12小时、30分钟及07:00汇总须经客户确认，不代表连接已开通。"
+    ],
+    "consumers": [
+      "d7"
+    ],
+    "supply": "customer_configuration",
+    "epistemic_state": "source_bound_conditional_template",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

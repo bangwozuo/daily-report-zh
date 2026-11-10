@@ -1,0 +1,46 @@
+{
+  "key": "report_template",
+  "title": "经营日报可编辑交付与证据表达模板",
+  "kind": "template",
+  "supply": "source_supported",
+  "consumers": [
+    "d5",
+    "d8"
+  ],
+  "content_requirements": [
+    "从d5、d8整理结论、三数、单提醒、唯一行动及Word/Excel/JSON字段，区分摘要正文和全量明细。",
+    "规定参照缺失写法、健康区间与检测判定分栏、事实与待验证归因分栏、确认异常证据链接、人工复核栏和AI标识。",
+    "归因与排查方向必须能回到导出行或检测结果；不沿用示例因果断言或效果承诺。"
+  ],
+  "evidence": {
+    "source_key": "d5",
+    "quote": "每个数字都要有参照物"
+  },
+  "id": "daily-report-zh:knowledge:report_template",
+  "normalized_kind": "template",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "经营日报可编辑交付与证据表达模板",
+    "kind": "template",
+    "actual_source_context": [
+      "- **结论先行**：第一句话就说清楚好坏，不写\"首先我们来看\"这类过渡语\n- **只报 3 个数**：宁可少说，不能超；第 4 个数店主记不住\n- **每个数字都要有参照物**：孤零零的营收没有意义，必须带对比（上周同星期 / 同星期均值 / 去年同期）\n- **必须按星期几对齐**：周末效应会造成 30%~50% 的正常波动，**严禁**拿周日和周六比\n- **单日订单 < 20 单**：转化率与退款率只报值，**不下结论**\n- **数据缺失**：不补零、不估算、不用\"约\"字掩盖，显式写\"缺 X 天数据\"\n- **特殊期豁免**：促销日 / 节假日 / 新店未满 30 天，写\"活动带动\"或\"节假日常规波动\"，不写\"异常\"\n- **正文 ≤ 200 字**：超出就是没提炼\n- 派生指标用公式重算，**不用对话口算替代**"
+    ],
+    "required_business_fields": [
+      "从d5、d8整理结论、三数、单提醒、唯一行动及Word/Excel/JSON字段，区分摘要正文和全量明细。",
+      "规定参照缺失写法、健康区间与检测判定分栏、事实与待验证归因分栏、确认异常证据链接、人工复核栏和AI标识。",
+      "归因与排查方向必须能回到导出行或检测结果；不沿用示例因果断言或效果承诺。"
+    ],
+    "consumers": [
+      "d5",
+      "d8"
+    ],
+    "supply": "source_supported",
+    "epistemic_state": "source_bound_conditional_template",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

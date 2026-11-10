@@ -1,0 +1,36 @@
+{
+  "id": "daily-report-zh:skill:anomaly-detect",
+  "original_id": "anomaly-detect",
+  "version": "1.0.0",
+  "purpose": "对真实日指标重算派生值，执行四规则异常检测，保留拦截证据并提出逐项排查方向。",
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "skills/anomaly-detect/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "aaf6084dc642f32e536c797e2a3bc62ee5c1863116ceb22eae64a6734fdf3e67"
+  },
+  "source_text_sha256": "aaf6084dc642f32e536c797e2a3bc62ee5c1863116ceb22eae64a6734fdf3e67",
+  "production_form": "combination",
+  "conditions": [
+    "输入门店、日营收/订单/访客/退款额及区间；开业日、促销日、节假日、去年同期与阈值覆盖须有来源。",
+    "保留R1营收下降20%、转化率1.5%、退款率5%规则，R2两倍标准差及不足14天回退IQR，R3连续至少3天且累计超过10%，R4同比优先并标冲突。",
+    "真实脚本执行为原必需条件；本次未提供脚本正文、执行凭据或客户数据，不能声称已检测或生成文件。"
+  ],
+  "acceptance": [
+    "星期对齐；特殊期与新店30天保护期拦截，低于20单仅报比率值，缺日不补零且比较断开。",
+    "summary、alerts、data_quality可追溯到detect.json；确认异常各含一条可执行排查项，拦截项仍留存原因。",
+    "交付五页签异常预警清单Excel、双轴趋势PNG与JSON；分高中低及拦截级别，标AI辅助并待人工复核。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:detection_rules",
+    "daily-report-zh:knowledge:store_context"
+  ],
+  "runtime_binding": "pending_actual_production",
+  "content_acceptance": "pending_actual_consumer_and_original_review"
+}

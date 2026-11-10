@@ -1,0 +1,18 @@
+{
+  "id": "workflow-call-daily-collect",
+  "name": "经营数据归集",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "employee_id": "employee-daily-report-zh",
+  "action": "collect",
+  "native_release": {
+    "production_run_id": "run_bcde82f6c9cb4786b002",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "9fcf0ef2e8051a47c4c1a48a5b90f63101f6a8003b95d9cbfc105829d416b08f",
+    "test_plan_sha256": "af459ffb3f9f066e4876c7b50a83ea914e4c2634061a704ef40658ef9146b12f",
+    "id": "daily-report-zh:workflow:de_local_08_wf01",
+    "source_key": "d9",
+    "action": "collect"
+  },
+  "host_creates_second_checkpoint": false
+}

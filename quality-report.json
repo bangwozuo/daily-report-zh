@@ -1,0 +1,77 @@
+{
+  "overall_score": 100,
+  "test_coverage": 100,
+  "documentation_score": 100,
+  "security_scan": {
+    "status": "warning",
+    "issues": [
+      {
+        "severity": "info",
+        "description": "This source projection has no comprehensive security certification; deploy with existing service permissions.",
+        "location": "package"
+      }
+    ],
+    "scanner_version": "distribution-private-boundary-1"
+  },
+  "performance_baseline": {
+    "avg_response_time_ms": 336.93389999098144,
+    "p95_response_time_ms": 389.77650000015274,
+    "throughput_rps": 2.967923924748608,
+    "memory_usage_mb": 183.83984375,
+    "tested_at": "2026-11-10T02:24:53.853782+00:00",
+    "scope": "five serial installed-contract GETs only; not business throughput, LLM latency, load test or SLA",
+    "latencies_ms": [
+      389.77650000015274,
+      315.1925999845844,
+      323.1558999978006,
+      324.1521999880206,
+      332.39229998434894
+    ],
+    "service": {
+      "memory_mb": 183.83984375,
+      "birth_utc": "2026-11-10T02:13:37.2886990Z",
+      "pid": 46724
+    }
+  },
+  "last_evaluated_at": "2026-11-10T02:25:14.921011+00:00",
+  "metric_definitions": {
+    "overall_score": "1/1 newly declared main-Skill journey completed, not a general capability score",
+    "test_coverage": "1/1 current main-Skill integration journey, not source line coverage",
+    "documentation_score": "main Skill plus SDK, connection, LICENSE, NOTICE all5 present"
+  },
+  "native_original_scope": {
+    "assets": 7,
+    "knowledge": 8,
+    "S07_S08_replayed": false
+  },
+  "current_actual_proof": {
+    "passed": true,
+    "scope": "installed five-file main Skill, actual HTTP SDK submission, r2 review note, real browser confirm r3, unchanged draft r1, native END, 5 original files, old14 history preserved",
+    "operation_id": "daily-191-main-skill-20261110-01",
+    "business_run_id": "run_4e3d35f47589443da921",
+    "native_run_id": "run_51d0fef4f63c4a94beb0",
+    "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+    "manifest_sha256": "3d6da62216a303c37294789e6096e6b75c070602bb48d176d2d3ef87f8aa23ca",
+    "draft_id": "art_eeb7a3afd7a04a4a9cd9",
+    "draft_revision": 1,
+    "draft_sha256": "c253dab60118ff8a14aec0a6b887f081422b579f792a73bd6426189d9c98352f",
+    "review_id": "art_924c963002924fe189d6",
+    "review_revision": 3,
+    "model_calls": 0,
+    "business_submit_count": 1,
+    "S07_S08_replayed": false,
+    "automatic_Host_routing_verified": false,
+    "other_Hosts_verified": false,
+    "commercial_customer_data": false,
+    "R78": "retained",
+    "all38_accepted": false
+  },
+  "limitations": [
+    "synthetic data only",
+    "no external push or customer systems",
+    "R78 retained",
+    "unreviewed third-party Hosts",
+    "knowledge citation rights metadata is incomplete; original rights require separate binding"
+  ],
+  "full_191_release_accepted": false
+}

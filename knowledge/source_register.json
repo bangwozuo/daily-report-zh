@@ -1,0 +1,44 @@
+{
+  "key": "source_register",
+  "title": "客户数据源授权与到数责任台账",
+  "kind": "customer_fact",
+  "supply": "customer_configuration",
+  "consumers": [
+    "d6",
+    "d9"
+  ],
+  "content_requirements": [
+    "由客户平台管理员提供源、官方API或自行导出路径、授权范围与有效期凭据、责任人、最近同步、应到/实到字段及每日到数。",
+    "配置最小字段集、营业结束确认、续期责任人、补数路径和月度变更记录；不收集密钥正文，不跨客户复用授权配置。"
+  ],
+  "evidence": {
+    "source_key": "d6",
+    "quote": "未授权的源**一律不得采集**"
+  },
+  "id": "daily-report-zh:knowledge:source_register",
+  "normalized_kind": "template",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "客户数据源授权与到数责任台账",
+    "kind": "template",
+    "actual_source_context": [
+      "- **有官方 API**：直接调用，只取授权范围内字段\n- **无 API 但有商家后台**：用户自行导出 CSV / Excel，人工导入\n- **两者都无**：用公开榜单 / 行业报告估算（标注来源），**不做爬取**\n- **授权到期**：`last_sync` 距今 > 24 小时且为官方 API → 标记「授权可能到期」，提醒责任人续期；\n  未授权的源**一律不得采集**，且不得用缓存数据冒充当日数据"
+    ],
+    "required_business_fields": [
+      "由客户平台管理员提供源、官方API或自行导出路径、授权范围与有效期凭据、责任人、最近同步、应到/实到字段及每日到数。",
+      "配置最小字段集、营业结束确认、续期责任人、补数路径和月度变更记录；不收集密钥正文，不跨客户复用授权配置。"
+    ],
+    "consumers": [
+      "d6",
+      "d9"
+    ],
+    "supply": "customer_configuration",
+    "epistemic_state": "source_bound_conditional_template",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

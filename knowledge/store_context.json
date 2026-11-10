@@ -1,0 +1,48 @@
+{
+  "key": "store_context",
+  "title": "本店特殊期、历史参照与行动约束",
+  "kind": "customer_fact",
+  "supply": "customer_configuration",
+  "consumers": [
+    "d4",
+    "d5",
+    "d8",
+    "d10"
+  ],
+  "content_requirements": [
+    "由店主提供品类、开业日期、促销记录、所在地节假日、上周同星期及去年同期导出，标注证据日期与适用门店。",
+    "提供责任人、预算上限、可执行范围；行业淡旺季另向平台或行业权威取得带时间地域的参照，不能替代本店实绩。"
+  ],
+  "evidence": {
+    "source_key": "d2",
+    "quote": "本店历史经营数据（趋势基线）；行业淡旺季参照表（平台侧）。"
+  },
+  "id": "daily-report-zh:knowledge:store_context",
+  "normalized_kind": "template",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "本店特殊期、历史参照与行动约束",
+    "kind": "template",
+    "actual_source_context": [
+      "```text\n本店历史经营数据（趋势基线）；行业淡旺季参照表（平台侧）。\n```"
+    ],
+    "required_business_fields": [
+      "由店主提供品类、开业日期、促销记录、所在地节假日、上周同星期及去年同期导出，标注证据日期与适用门店。",
+      "提供责任人、预算上限、可执行范围；行业淡旺季另向平台或行业权威取得带时间地域的参照，不能替代本店实绩。"
+    ],
+    "consumers": [
+      "d4",
+      "d5",
+      "d8",
+      "d10"
+    ],
+    "supply": "customer_configuration",
+    "epistemic_state": "source_bound_conditional_template",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

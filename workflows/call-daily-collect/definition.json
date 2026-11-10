@@ -1,0 +1,203 @@
+{
+  "id": "skill-call-daily-collect",
+  "name": "经营数据归集",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "const": "collect"
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  },
+  "purpose": "编排导出接入体检、门禁、逐源归集和断供台账，向下游提供可追溯的资格材料。",
+  "conditions": [
+    "每日21:30外部收数；需要源配置、区间、每日到数、预处理样本和采集策略，实际搬运由客户完成。",
+    "必须真实调用sync.py且取得剔除个人信息的执行证据；未授权数据不可因告警级状态而进入分析。",
+    "本次不判定放行；缺执行和人工确认材料返回父任务。"
+  ],
+  "acceptance": [
+    "空源停止；红线源阻断下游，不以剔除建议代替已完成清理；人工未确认维持待确认。",
+    "归集单列已归集/待补齐/已剔除、门禁理由、源清单、断供明细及汇总；低于50%不可用，断供日原样保留。",
+    "交付采集归集单.xlsx、collect.json及sync原始产物；downstream_allowed必须与阻断和人工确认状态一致。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:source_register",
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:privacy_release"
+  ],
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "workflows/store-data-collect-flow/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09"
+  },
+  "original_contract": {
+    "id": "daily-report-zh:workflow:de_local_08_wf01",
+    "original_id": "de_local_08_wf01",
+    "version": "1.0.0",
+    "purpose": "编排导出接入体检、门禁、逐源归集和断供台账，向下游提供可追溯的资格材料。",
+    "source": {
+      "repository": "bangwozuo/daily-report-zh",
+      "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+      "path": "workflows/store-data-collect-flow/SKILL.md",
+      "source_original": {
+        "id": "art_493d00f3a4e44ee9a4ad",
+        "revision": 1,
+        "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+      },
+      "content_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09"
+    },
+    "source_text_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09",
+    "production_form": "workflow",
+    "conditions": [
+      "每日21:30外部收数；需要源配置、区间、每日到数、预处理样本和采集策略，实际搬运由客户完成。",
+      "必须真实调用sync.py且取得剔除个人信息的执行证据；未授权数据不可因告警级状态而进入分析。",
+      "本次不判定放行；缺执行和人工确认材料返回父任务。"
+    ],
+    "acceptance": [
+      "空源停止；红线源阻断下游，不以剔除建议代替已完成清理；人工未确认维持待确认。",
+      "归集单列已归集/待补齐/已剔除、门禁理由、源清单、断供明细及汇总；低于50%不可用，断供日原样保留。",
+      "交付采集归集单.xlsx、collect.json及sync原始产物；downstream_allowed必须与阻断和人工确认状态一致。"
+    ],
+    "knowledge_ids": [
+      "daily-report-zh:knowledge:source_register",
+      "daily-report-zh:knowledge:metric_contract",
+      "daily-report-zh:knowledge:privacy_release"
+    ],
+    "runtime_binding": "pending_actual_production",
+    "content_acceptance": "pending_actual_consumer_and_original_review"
+  },
+  "execution": {
+    "type": "installed-native-workflow",
+    "service_required": true,
+    "operation": "collect",
+    "checkpoint_authority": "existing WorkflowService",
+    "independent_offline_execution": false,
+    "model_required": false
+  },
+  "current_runtime_binding": {
+    "source_key": "d9",
+    "asset_id": "daily-report-zh:workflow:de_local_08_wf01",
+    "action": "collect",
+    "production_run_id": "run_bcde82f6c9cb4786b002",
+    "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-collect-1.0.0-run_bcde82f6c9cb4786b002",
+    "installation": null,
+    "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\collect\\evaluation-original.json",
+    "business_evaluation_sha256": "7437659693180cbdb7e3c8cccae61318fc609067b95bbcb8004cbf2662068a99",
+    "normal_and_negative_cases_executed": true,
+    "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+    "complete_employee": false
+  },
+  "distribution": {
+    "path": "workflows/call-daily-collect",
+    "client_script": "scripts/product.py",
+    "required_files": [
+      "SKILL.md",
+      "definition.json",
+      "schema.json",
+      "prompt.txt",
+      "scripts/product.py",
+      "LICENSE",
+      "NOTICE",
+      "workflow.json"
+    ]
+  }
+}

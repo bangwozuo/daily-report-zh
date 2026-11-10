@@ -1,0 +1,42 @@
+{
+  "key": "weekly_method",
+  "title": "周汇总星期结构与单行动优先级",
+  "kind": "method",
+  "supply": "source_supported",
+  "consumers": [
+    "d10"
+  ],
+  "content_requirements": [
+    "从d10取得周汇总、派生公式、周环比缺失处理、星期结构样本数和五级优先序。",
+    "行动模板保留责任人/动作/范围/选取理由与零预算限制；渠道调整仅形成建议，需额外渠道效率事实才能确定具体对象。"
+  ],
+  "evidence": {
+    "source_key": "d10",
+    "quote": "按 5 级优先级命中第一条即停"
+  },
+  "id": "daily-report-zh:knowledge:weekly_method",
+  "normalized_kind": "method",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "周汇总星期结构与单行动优先级",
+    "kind": "method",
+    "actual_source_context": [
+      "| # | 步骤 | 技能资产 | 输入 | 处理 | 输出 | 失败处理 |\n|---|------|---------|------|------|------|---------|\n| 1 | 异常检测 | `../../skills/anomaly-detect/` | `metrics` / `category` / `period` / `promo_days` | 四规则 + 假阳性拦截，产出本周确认异常 | `detect.json` | 退出码 2（缺依赖）→ 打印修复命令后中止；退出码 3（无数据）→ 列出缺失字段，**不拼一份周报** |\n| 2 | 周度汇总 | 本流程脚本 | 本周 `metrics` + `last_week` | 逐日求和 + 派生指标（客单价 = 营收÷订单 等）+ 周环比 | `week_metrics` / `wow_pct` | 区间内无数据 → 退出码 3 并提示；上周缺失 → 周环比写\"—\"，**不估算** |\n| 3 | 星期结构 | 本流程脚本 | 本周 `metrics` | 按星期几分组算日均营收与订单 | 星期结构表 | 某星期只有 1 天 → 标注天数，避免与多日星期直接对比产生误判 |\n| 4 | 收敛动作 | `../../skills/daily-report-copy/` 口径 | 周汇总 + 本周异常 | 按 5 级优先级命中第一条即停，输出**唯一**动作 | `focus_action` / `focus_reason` | 无可触发条件 → 输出\"维持现有节奏\"，**不硬给动作** |\n| 5 | 交付 | 本流程脚本 | 全部中间结果 | 生成 Word / Excel / 周对比图 | `周度经营建议.docx` / `周度汇总.xlsx` / `周对比图.png` / `weekly_flow.json` | 写盘失败 → 保留中间 JSON 并报错，不静默成功 |\n| 6 | 人工确认 | 人工（🔒） | 建议草稿 | 店长确认动作可执行 | 确认或打回 | 打回 → 回到第 4 步重选动作，不直接对外发布 |"
+    ],
+    "required_business_fields": [
+      "从d10取得周汇总、派生公式、周环比缺失处理、星期结构样本数和五级优先序。",
+      "行动模板保留责任人/动作/范围/选取理由与零预算限制；渠道调整仅形成建议，需额外渠道效率事实才能确定具体对象。"
+    ],
+    "consumers": [
+      "d10"
+    ],
+    "supply": "source_supported",
+    "epistemic_state": "source_method_pending_applicability_review",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

@@ -1,0 +1,200 @@
+{
+  "id": "skill-daily-report-copy",
+  "name": "日报文案",
+  "version": "0.2.0-rc.1",
+  "kind": "generic",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "const": "copy"
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  },
+  "purpose": "将已核对指标和已确认异常转为可编辑日报、指标明细与明日排查行动。",
+  "conditions": [
+    "接收原始四指标、报告期、同星期对比、特殊期、店龄及确认异常；不承担接入校验或重新检测。",
+    "数值、健康区间与关键数选择需report_copy.py真实结果；缺对比不编造，归因不得从统计相关直接写成已证实原因。"
+  ],
+  "acceptance": [
+    "结论不超过40字，正文不超过200字；营收必选，依退款率、转化率、客单价偏离优先序取三个数，每数附参照或明确缺口。",
+    "最多一句提醒、一个不超过60字且含责任人/动作/范围的建议；特殊期、新店与小样本不写异常。",
+    "交付五章节经营日报.docx、五页签日报数据摘要.xlsx与report_copy.json，保留全部指标和异常证据，人工复核前不发布。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:report_template",
+    "daily-report-zh:knowledge:store_context"
+  ],
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "skills/daily-report-copy/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108"
+  },
+  "original_contract": {
+    "id": "daily-report-zh:skill:daily-report-copy",
+    "original_id": "daily-report-copy",
+    "version": "1.0.0",
+    "purpose": "将已核对指标和已确认异常转为可编辑日报、指标明细与明日排查行动。",
+    "source": {
+      "repository": "bangwozuo/daily-report-zh",
+      "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+      "path": "skills/daily-report-copy/SKILL.md",
+      "source_original": {
+        "id": "art_493d00f3a4e44ee9a4ad",
+        "revision": 1,
+        "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+      },
+      "content_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108"
+    },
+    "source_text_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108",
+    "production_form": "combination",
+    "conditions": [
+      "接收原始四指标、报告期、同星期对比、特殊期、店龄及确认异常；不承担接入校验或重新检测。",
+      "数值、健康区间与关键数选择需report_copy.py真实结果；缺对比不编造，归因不得从统计相关直接写成已证实原因。"
+    ],
+    "acceptance": [
+      "结论不超过40字，正文不超过200字；营收必选，依退款率、转化率、客单价偏离优先序取三个数，每数附参照或明确缺口。",
+      "最多一句提醒、一个不超过60字且含责任人/动作/范围的建议；特殊期、新店与小样本不写异常。",
+      "交付五章节经营日报.docx、五页签日报数据摘要.xlsx与report_copy.json，保留全部指标和异常证据，人工复核前不发布。"
+    ],
+    "knowledge_ids": [
+      "daily-report-zh:knowledge:metric_contract",
+      "daily-report-zh:knowledge:report_template",
+      "daily-report-zh:knowledge:store_context"
+    ],
+    "runtime_binding": "pending_actual_production",
+    "content_acceptance": "pending_actual_consumer_and_original_review"
+  },
+  "execution": {
+    "type": "installed-native-workflow",
+    "service_required": true,
+    "operation": "copy",
+    "checkpoint_authority": "existing WorkflowService",
+    "independent_offline_execution": false,
+    "model_required": false
+  },
+  "current_runtime_binding": {
+    "source_key": "d5",
+    "asset_id": "daily-report-zh:skill:daily-report-copy",
+    "action": "copy",
+    "production_run_id": "run_88d162688cd34bd1a979",
+    "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-copy-1.0.0-run_88d162688cd34bd1a979",
+    "installation": null,
+    "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\copy\\evaluation-original.json",
+    "business_evaluation_sha256": "7cda0f1f3095c1cb08ba2d4c4b7a44b7c503cab2aceb3a575be7c7034ead4db3",
+    "normal_and_negative_cases_executed": true,
+    "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+    "complete_employee": false
+  },
+  "distribution": {
+    "path": "skills/daily-report-copy",
+    "client_script": "scripts/product.py",
+    "required_files": [
+      "SKILL.md",
+      "definition.json",
+      "schema.json",
+      "prompt.txt",
+      "scripts/product.py",
+      "LICENSE",
+      "NOTICE"
+    ]
+  }
+}

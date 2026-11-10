@@ -1,0 +1,124 @@
+{
+  "staff_id": "daily-report-zh",
+  "engine_gate": {
+    "project_id": "prj_6f1f1beae0634d0ca5cb",
+    "artifact_id": "art_479ffbdf429e4a12a28b",
+    "revision": 1,
+    "sha256": "a42c046675d1309d20f9795af23b62069e3eb739b354c3887ec53c406c58fc3b",
+    "scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+    "G1_passed": true,
+    "formal_assets_complete": false
+  },
+  "assets": [
+    {
+      "source_key": "d6",
+      "asset_id": "daily-report-zh:skill:store-data-sync",
+      "action": "sync",
+      "production_run_id": "run_0936f0e488a4464799d5",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-sync-1.0.0-run_0936f0e488a4464799d5",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\sync\\evaluation-original.json",
+      "business_evaluation_sha256": "98c33dde3cbebd66451774aceedb51e4a33ea5f7ec3e3bd6b13e1cd9a9cae600",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d4",
+      "asset_id": "daily-report-zh:skill:anomaly-detect",
+      "action": "detect",
+      "production_run_id": "run_da1cbba3982e4f03a992",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-detect-1.0.0-run_da1cbba3982e4f03a992",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\detect\\evaluation-original.json",
+      "business_evaluation_sha256": "f7b68f0fe661ed4249c5b86f1f7c3d26f146c6d5acbb6b8c416481e37d191bc2",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d5",
+      "asset_id": "daily-report-zh:skill:daily-report-copy",
+      "action": "copy",
+      "production_run_id": "run_88d162688cd34bd1a979",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-copy-1.0.0-run_88d162688cd34bd1a979",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\copy\\evaluation-original.json",
+      "business_evaluation_sha256": "7cda0f1f3095c1cb08ba2d4c4b7a44b7c503cab2aceb3a575be7c7034ead4db3",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d9",
+      "asset_id": "daily-report-zh:workflow:de_local_08_wf01",
+      "action": "collect",
+      "production_run_id": "run_bcde82f6c9cb4786b002",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-collect-1.0.0-run_bcde82f6c9cb4786b002",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\collect\\evaluation-original.json",
+      "business_evaluation_sha256": "7437659693180cbdb7e3c8cccae61318fc609067b95bbcb8004cbf2662068a99",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d8",
+      "asset_id": "daily-report-zh:workflow:de_local_08_wf02",
+      "action": "daily",
+      "production_run_id": "run_a0f8902fa30942248045",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-daily-1.0.0-run_a0f8902fa30942248045",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\daily\\evaluation-original.json",
+      "business_evaluation_sha256": "e13247e6147c884664d748914def08fc17f4e099d368b66adbc988b90b0a34ab",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d7",
+      "asset_id": "daily-report-zh:workflow:de_local_08_wf03",
+      "action": "alert",
+      "production_run_id": "run_91d0cbef0b8949debae7",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-alert-1.0.0-run_91d0cbef0b8949debae7",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\alert\\evaluation-original.json",
+      "business_evaluation_sha256": "771b3198c28f4160cd6d1878a3ebcfd4aae2aeca7ee965c4702e294ed23efd0d",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    },
+    {
+      "source_key": "d10",
+      "asset_id": "daily-report-zh:workflow:de_local_08_wf04",
+      "action": "weekly",
+      "production_run_id": "run_35a2c2f0040d4aa79698",
+      "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-weekly-1.0.0-run_35a2c2f0040d4aa79698",
+      "installation": null,
+      "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\weekly\\evaluation-original.json",
+      "business_evaluation_sha256": "5128b377feaaaf9209a90503577c304c1b7383c5a1552d727a6a2a5a22df3d25",
+      "normal_and_negative_cases_executed": true,
+      "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+      "complete_employee": false
+    }
+  ],
+  "knowledge": {
+    "count": 8,
+    "production_run_id": "run_f6c09714dd174ba9aef3",
+    "directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-knowledge-1.0.0-run_f6c09714dd174ba9aef3",
+    "publication_and_native_retrieval_verified": true,
+    "customer_facts": false
+  },
+  "application_url": "http://127.0.0.1:8940/",
+  "formal_employee_accepted": false,
+  "formal_staff_accepted_count": 0,
+  "cumulative_calls_unchanged": 376,
+  "new_model_calls": 0,
+  "remaining": [
+    "whole-role native production and installation",
+    "trigger consumers and persistent alert acceptance",
+    "ordinary/history/source and scope closure",
+    "other 29 roles and remaining original assets",
+    "4 suites / 8 teams / 4 independent GitHub workbenches"
+  ]
+}

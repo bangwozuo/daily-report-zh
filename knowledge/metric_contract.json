@@ -1,0 +1,54 @@
+{
+  "key": "metric_contract",
+  "title": "本店经营导出字段与核算口径合同",
+  "kind": "customer_fact",
+  "supply": "customer_configuration",
+  "consumers": [
+    "d4",
+    "d5",
+    "d6",
+    "d8",
+    "d9",
+    "d10"
+  ],
+  "content_requirements": [
+    "由客户提供台账与授权后台导出样本，确认营业日边界、币种、营收含税及退款归属、订单去重、访客定义、核销和差评字段映射，记录来源与核对人。",
+    "保留日级date/revenue/orders/visitors/refunds及同期来源，派生公式为营收除订单、订单除访客、退款额除营收；零分母处理与跨源重复消除尚需客户及脚本契约确认。",
+    "历史基线与实际本周/上周数据须本店隔离，原占位模板和示例不是客户事实。"
+  ],
+  "evidence": {
+    "source_key": "d5",
+    "quote": "数据口径以门店台账与平台后台为准"
+  },
+  "id": "daily-report-zh:knowledge:metric_contract",
+  "normalized_kind": "template",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "本店经营导出字段与核算口径合同",
+    "kind": "template",
+    "actual_source_context": [
+      "- 本技能输出为 **AI 生成内容**，对外使用（加盟商 / 投资人 / 平台）前必须人工复核\n- 经营数据涉及门店商业信息，不对外披露明细，不外传原始数据文件\n- 数据口径以门店台账与平台后台为准，报告结论仅供参考\n- 涉及员工个人绩效的结论不下发给员工本人，仅用于经营管理\n- 请按所在平台要求完成 AI 生成内容标识"
+    ],
+    "required_business_fields": [
+      "由客户提供台账与授权后台导出样本，确认营业日边界、币种、营收含税及退款归属、订单去重、访客定义、核销和差评字段映射，记录来源与核对人。",
+      "保留日级date/revenue/orders/visitors/refunds及同期来源，派生公式为营收除订单、订单除访客、退款额除营收；零分母处理与跨源重复消除尚需客户及脚本契约确认。",
+      "历史基线与实际本周/上周数据须本店隔离，原占位模板和示例不是客户事实。"
+    ],
+    "consumers": [
+      "d4",
+      "d5",
+      "d6",
+      "d8",
+      "d9",
+      "d10"
+    ],
+    "supply": "customer_configuration",
+    "epistemic_state": "source_bound_conditional_template",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

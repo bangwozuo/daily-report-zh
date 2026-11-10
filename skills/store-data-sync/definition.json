@@ -1,0 +1,204 @@
+{
+  "id": "skill-store-data-sync",
+  "name": "来源体检",
+  "version": "0.2.0-rc.1",
+  "kind": "generic",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "const": "sync"
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  },
+  "purpose": "对客户授权经营导出的来源、字段映射、到数覆盖及个人信息风险形成接入体检，不冒充实际连接器。",
+  "conditions": [
+    "需要来源、接入方式、授权、责任人、最近同步、应到/实到字段、每日到数和经预处理抽样。",
+    "原能力包括缺字段降级路径、授权巡检及脱敏字段实际剔除；本次只能分析义务，不执行删除或外部接入。",
+    "估算降级与下游禁止估算冲突须返回父任务确认，估算值不得冒充真实经营实绩。"
+  ],
+  "acceptance": [
+    "四类校验分别有证据：字段低于80%提示、低于50%源不可用；连续两天断供提醒，不补零。",
+    "六类个人信息在入库前拦截；红线源下游前剔除，未授权不得采集，超过24小时同步仅提示可能到期，不冒充真实授权验证。",
+    "交付五页签接入清单、完整率及到数两张PNG、sync.json；每个缺字段列实际下游影响和可行补齐路径。",
+    "保留21:30收数、21:35校验、21:40脱敏、21:45交付、周一授权巡检及月初字段集复盘责任点。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:source_register",
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:privacy_release"
+  ],
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "skills/store-data-sync/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a"
+  },
+  "original_contract": {
+    "id": "daily-report-zh:skill:store-data-sync",
+    "original_id": "store-data-sync",
+    "version": "1.0.0",
+    "purpose": "对客户授权经营导出的来源、字段映射、到数覆盖及个人信息风险形成接入体检，不冒充实际连接器。",
+    "source": {
+      "repository": "bangwozuo/daily-report-zh",
+      "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+      "path": "skills/store-data-sync/SKILL.md",
+      "source_original": {
+        "id": "art_493d00f3a4e44ee9a4ad",
+        "revision": 1,
+        "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+      },
+      "content_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a"
+    },
+    "source_text_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a",
+    "production_form": "combination",
+    "conditions": [
+      "需要来源、接入方式、授权、责任人、最近同步、应到/实到字段、每日到数和经预处理抽样。",
+      "原能力包括缺字段降级路径、授权巡检及脱敏字段实际剔除；本次只能分析义务，不执行删除或外部接入。",
+      "估算降级与下游禁止估算冲突须返回父任务确认，估算值不得冒充真实经营实绩。"
+    ],
+    "acceptance": [
+      "四类校验分别有证据：字段低于80%提示、低于50%源不可用；连续两天断供提醒，不补零。",
+      "六类个人信息在入库前拦截；红线源下游前剔除，未授权不得采集，超过24小时同步仅提示可能到期，不冒充真实授权验证。",
+      "交付五页签接入清单、完整率及到数两张PNG、sync.json；每个缺字段列实际下游影响和可行补齐路径。",
+      "保留21:30收数、21:35校验、21:40脱敏、21:45交付、周一授权巡检及月初字段集复盘责任点。"
+    ],
+    "knowledge_ids": [
+      "daily-report-zh:knowledge:source_register",
+      "daily-report-zh:knowledge:metric_contract",
+      "daily-report-zh:knowledge:privacy_release"
+    ],
+    "runtime_binding": "pending_actual_production",
+    "content_acceptance": "pending_actual_consumer_and_original_review"
+  },
+  "execution": {
+    "type": "installed-native-workflow",
+    "service_required": true,
+    "operation": "sync",
+    "checkpoint_authority": "existing WorkflowService",
+    "independent_offline_execution": false,
+    "model_required": false
+  },
+  "current_runtime_binding": {
+    "source_key": "d6",
+    "asset_id": "daily-report-zh:skill:store-data-sync",
+    "action": "sync",
+    "production_run_id": "run_0936f0e488a4464799d5",
+    "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-sync-1.0.0-run_0936f0e488a4464799d5",
+    "installation": null,
+    "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\sync\\evaluation-original.json",
+    "business_evaluation_sha256": "98c33dde3cbebd66451774aceedb51e4a33ea5f7ec3e3bd6b13e1cd9a9cae600",
+    "normal_and_negative_cases_executed": true,
+    "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+    "complete_employee": false
+  },
+  "distribution": {
+    "path": "skills/store-data-sync",
+    "client_script": "scripts/product.py",
+    "required_files": [
+      "SKILL.md",
+      "definition.json",
+      "schema.json",
+      "prompt.txt",
+      "scripts/product.py",
+      "LICENSE",
+      "NOTICE"
+    ]
+  }
+}

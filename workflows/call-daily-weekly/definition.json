@@ -1,0 +1,203 @@
+{
+  "id": "skill-call-daily-weekly",
+  "name": "周度建议",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "const": "weekly"
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  },
+  "purpose": "保留周度汇总、星期结构和唯一重点行动能力，作为日报链路之外的独立周建议流程。",
+  "conditions": [
+    "周一09:00需外部触发；客户提供本周区间完整日指标、可选上周汇总、责任人和预算约束。",
+    "先过采集门禁并真实调用检测；不预测营收、不执行渠道暂停、资金转移或老客召回。"
+  ],
+  "acceptance": [
+    "公式汇总营收/订单/访客/退款及派生指标，缺上周显示空缺而不估算；星期结构列样本天数，单日样本不得冒充多日可比。",
+    "按高异常、退款率超过3%、转化率低于2%、周营收下降至少10%、维持的优先序命中即停，只给一个含责任人/动作/范围的重点行动。",
+    "零预算约束实际生效，打回返回行动选择；交付周度经营建议.docx、周度汇总.xlsx、周对比图.png、weekly_flow.json并待人工确认。"
+  ],
+  "knowledge_ids": [
+    "daily-report-zh:knowledge:metric_contract",
+    "daily-report-zh:knowledge:detection_rules",
+    "daily-report-zh:knowledge:weekly_method",
+    "daily-report-zh:knowledge:store_context"
+  ],
+  "source": {
+    "repository": "bangwozuo/daily-report-zh",
+    "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+    "path": "workflows/weekly-ops-advice-flow/SKILL.md",
+    "source_original": {
+      "id": "art_493d00f3a4e44ee9a4ad",
+      "revision": 1,
+      "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+    },
+    "content_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6"
+  },
+  "original_contract": {
+    "id": "daily-report-zh:workflow:de_local_08_wf04",
+    "original_id": "de_local_08_wf04",
+    "version": "1.0.0",
+    "purpose": "保留周度汇总、星期结构和唯一重点行动能力，作为日报链路之外的独立周建议流程。",
+    "source": {
+      "repository": "bangwozuo/daily-report-zh",
+      "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+      "path": "workflows/weekly-ops-advice-flow/SKILL.md",
+      "source_original": {
+        "id": "art_493d00f3a4e44ee9a4ad",
+        "revision": 1,
+        "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+      },
+      "content_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6"
+    },
+    "source_text_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6",
+    "production_form": "workflow",
+    "conditions": [
+      "周一09:00需外部触发；客户提供本周区间完整日指标、可选上周汇总、责任人和预算约束。",
+      "先过采集门禁并真实调用检测；不预测营收、不执行渠道暂停、资金转移或老客召回。"
+    ],
+    "acceptance": [
+      "公式汇总营收/订单/访客/退款及派生指标，缺上周显示空缺而不估算；星期结构列样本天数，单日样本不得冒充多日可比。",
+      "按高异常、退款率超过3%、转化率低于2%、周营收下降至少10%、维持的优先序命中即停，只给一个含责任人/动作/范围的重点行动。",
+      "零预算约束实际生效，打回返回行动选择；交付周度经营建议.docx、周度汇总.xlsx、周对比图.png、weekly_flow.json并待人工确认。"
+    ],
+    "knowledge_ids": [
+      "daily-report-zh:knowledge:metric_contract",
+      "daily-report-zh:knowledge:detection_rules",
+      "daily-report-zh:knowledge:weekly_method",
+      "daily-report-zh:knowledge:store_context"
+    ],
+    "runtime_binding": "pending_actual_production",
+    "content_acceptance": "pending_actual_consumer_and_original_review"
+  },
+  "execution": {
+    "type": "installed-native-workflow",
+    "service_required": true,
+    "operation": "weekly",
+    "checkpoint_authority": "existing WorkflowService",
+    "independent_offline_execution": false,
+    "model_required": false
+  },
+  "current_runtime_binding": {
+    "source_key": "d10",
+    "asset_id": "daily-report-zh:workflow:de_local_08_wf04",
+    "action": "weekly",
+    "production_run_id": "run_35a2c2f0040d4aa79698",
+    "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-weekly-1.0.0-run_35a2c2f0040d4aa79698",
+    "installation": null,
+    "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\weekly\\evaluation-original.json",
+    "business_evaluation_sha256": "5128b377feaaaf9209a90503577c304c1b7383c5a1552d727a6a2a5a22df3d25",
+    "normal_and_negative_cases_executed": true,
+    "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+    "complete_employee": false
+  },
+  "distribution": {
+    "path": "workflows/call-daily-weekly",
+    "client_script": "scripts/product.py",
+    "required_files": [
+      "SKILL.md",
+      "definition.json",
+      "schema.json",
+      "prompt.txt",
+      "scripts/product.py",
+      "LICENSE",
+      "NOTICE",
+      "workflow.json"
+    ]
+  }
+}

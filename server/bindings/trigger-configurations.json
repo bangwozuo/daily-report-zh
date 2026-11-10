@@ -1,0 +1,144 @@
+[
+  {
+    "id": "daily-role-installed-clock",
+    "revision": 2,
+    "definition": {
+      "enabled": false,
+      "event_topic": null,
+      "fields": {
+        "operation": "collect"
+      },
+      "grace_seconds": 120,
+      "id": "daily-role-installed-clock",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "kind": "daily",
+      "local_time": "14:08",
+      "misfire": "latest_once",
+      "name": "经营日报已安装员工一次系统时钟验收",
+      "operation": "application",
+      "resource_id": "daily-report-zh",
+      "resource_version": null,
+      "starts_at": "2026-11-01T06:07:15.907664+00:00",
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "id": "daily-role-source-ready",
+    "revision": 2,
+    "definition": {
+      "enabled": true,
+      "event_topic": "daily.source.received",
+      "fields": {
+        "operation": "collect"
+      },
+      "grace_seconds": 120,
+      "id": "daily-role-source-ready",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "kind": "event",
+      "local_time": null,
+      "misfire": "skip",
+      "name": "经营资料归集后的明确事件",
+      "operation": "application",
+      "resource_id": "daily-report-zh",
+      "resource_version": null,
+      "starts_at": null,
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "id": "daily-role-schedule-weekly",
+    "revision": 2,
+    "definition": {
+      "enabled": true,
+      "event_topic": null,
+      "fields": {},
+      "grace_seconds": 120,
+      "id": "daily-role-schedule-weekly",
+      "installation_id": null,
+      "kind": "daily",
+      "local_time": "09:00",
+      "misfire": "skip",
+      "name": "生成周度建议 · 仿真配置",
+      "operation": "workflow",
+      "resource_id": "daily-role-weekly-calendar-gate",
+      "resource_version": 3,
+      "starts_at": "2026-11-01T04:50:45.828678+00:00",
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "id": "daily-role-schedule-daily",
+    "revision": 2,
+    "definition": {
+      "enabled": true,
+      "event_topic": null,
+      "fields": {
+        "operation": "daily"
+      },
+      "grace_seconds": 120,
+      "id": "daily-role-schedule-daily",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "kind": "daily",
+      "local_time": "22:00",
+      "misfire": "skip",
+      "name": "生成经营日报 · 仿真配置",
+      "operation": "application",
+      "resource_id": "daily-report-zh",
+      "resource_version": null,
+      "starts_at": "2026-11-01T04:50:45.828678+00:00",
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "id": "daily-role-schedule-alert",
+    "revision": 2,
+    "definition": {
+      "enabled": true,
+      "event_topic": null,
+      "fields": {
+        "operation": "alert"
+      },
+      "grace_seconds": 120,
+      "id": "daily-role-schedule-alert",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "kind": "daily",
+      "local_time": "21:50",
+      "misfire": "skip",
+      "name": "准备异常提醒 · 仿真配置",
+      "operation": "application",
+      "resource_id": "daily-report-zh",
+      "resource_version": null,
+      "starts_at": "2026-11-01T04:50:45.828678+00:00",
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  },
+  {
+    "id": "daily-role-schedule-collect",
+    "revision": 2,
+    "definition": {
+      "enabled": true,
+      "event_topic": null,
+      "fields": {
+        "operation": "collect"
+      },
+      "grace_seconds": 120,
+      "id": "daily-role-schedule-collect",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "kind": "daily",
+      "local_time": "21:30",
+      "misfire": "skip",
+      "name": "归集经营数据 · 仿真配置",
+      "operation": "application",
+      "resource_id": "daily-report-zh",
+      "resource_version": null,
+      "starts_at": "2026-11-01T04:50:45.828678+00:00",
+      "target": "deepagents",
+      "timezone": "Asia/Shanghai"
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "id": "workflow-call-daily-generate",
+  "name": "经营日报",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "employee_id": "employee-daily-report-zh",
+  "action": "daily",
+  "native_release": {
+    "production_run_id": "run_a0f8902fa30942248045",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "595ee2f201670d506633080d44ae2b357e50d80d95129d103b840be702d943f8",
+    "test_plan_sha256": "8193dae207ca887e5b49490d5be1fd26987dd5b5728ae56651abe14ccc0b1405",
+    "id": "daily-report-zh:workflow:de_local_08_wf02",
+    "source_key": "d8",
+    "action": "daily"
+  },
+  "host_creates_second_checkpoint": false
+}

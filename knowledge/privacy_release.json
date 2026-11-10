@@ -1,0 +1,50 @@
+{
+  "key": "privacy_release",
+  "title": "经营数据最小化与人工交付规范核验",
+  "kind": "standard",
+  "supply": "needs_authoritative_source",
+  "consumers": [
+    "d6",
+    "d7",
+    "d8",
+    "d9"
+  ],
+  "content_requirements": [
+    "由父任务取得现行权威个人信息处理、AI内容标识及适用平台规则，核实版本和适用范围，不直接认可仓库合规声明。",
+    "业务控制涵盖六类个人信息入库前剔除、原始文件不入仓不外传、商业明细访问范围、员工绩效不下发及人工审核记录；客户配置保存期限与接收者权限。",
+    "保留已清理副本与源数据不改写的边界、残留核验、发布前人工确认及打回记录。"
+  ],
+  "evidence": {
+    "source_key": "d6",
+    "quote": "不做\"先存再脱敏\""
+  },
+  "id": "daily-report-zh:knowledge:privacy_release",
+  "normalized_kind": "standard",
+  "customer_facts_supplied": false,
+  "content_acceptance": "pending_source_and_task_review",
+  "version": "1.0.0",
+  "content": {
+    "title": "经营数据最小化与人工交付规范核验",
+    "kind": "standard",
+    "actual_source_context": [
+      "- ❌ **不连接外部系统**：无凭证、不登录后台、不调用平台 API、不爬取\n- ❌ 不采用或建议任何黑名单接入方式（爬取、模拟登录、协议机器人、接码）\n- ❌ 不录入手机号 / 身份证号 / 银行卡号 / 邮箱 / 详细地址 / 客户姓名；不做\"先存再脱敏\"\n- ❌ 缺字段时不编数据、不填默认值、不补零\n- ❌ 不做经营分析结论（交给 `anomaly-detect` 与 `daily-report-copy`）\n- ❌ 不做资金操作、不代做签约或授权决策"
+    ],
+    "required_business_fields": [
+      "由父任务取得现行权威个人信息处理、AI内容标识及适用平台规则，核实版本和适用范围，不直接认可仓库合规声明。",
+      "业务控制涵盖六类个人信息入库前剔除、原始文件不入仓不外传、商业明细访问范围、员工绩效不下发及人工审核记录；客户配置保存期限与接收者权限。",
+      "保留已清理副本与源数据不改写的边界、残留核验、发布前人工确认及打回记录。"
+    ],
+    "consumers": [
+      "d6",
+      "d7",
+      "d8",
+      "d9"
+    ],
+    "supply": "needs_authoritative_source",
+    "epistemic_state": "source_method_pending_applicability_review",
+    "customer_facts": null,
+    "simulation_is_customer_fact": false
+  },
+  "source_excerpt_not_complete_knowledge_approval": true,
+  "runtime_binding": "pending_real_knowledge_production"
+}

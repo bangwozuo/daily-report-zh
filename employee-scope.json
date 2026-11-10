@@ -1,0 +1,464 @@
+{
+  "staff_id": "daily-report-zh",
+  "task": "授权真实经营导出→口径核对/汇总→可编辑日报、明细、异常证据和排查项",
+  "source_scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+  "engine_gate": {
+    "project_id": "prj_6f1f1beae0634d0ca5cb",
+    "artifact_id": "art_479ffbdf429e4a12a28b",
+    "revision": 1,
+    "sha256": "a42c046675d1309d20f9795af23b62069e3eb739b354c3887ec53c406c58fc3b",
+    "scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+    "G1_passed": true,
+    "formal_assets_complete": false
+  },
+  "assets": [
+    {
+      "id": "daily-report-zh:skill:anomaly-detect",
+      "directory": "skills\\anomaly-detect",
+      "source_key": "d4",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:skill:daily-report-copy",
+      "directory": "skills\\daily-report-copy",
+      "source_key": "d5",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:skill:store-data-sync",
+      "directory": "skills\\store-data-sync",
+      "source_key": "d6",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:workflow:de_local_08_wf03",
+      "directory": "workflows\\de_local_08_wf03",
+      "source_key": "d7",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:workflow:de_local_08_wf02",
+      "directory": "workflows\\de_local_08_wf02",
+      "source_key": "d8",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:workflow:de_local_08_wf01",
+      "directory": "workflows\\de_local_08_wf01",
+      "source_key": "d9",
+      "actual_execution_accepted": false
+    },
+    {
+      "id": "daily-report-zh:workflow:de_local_08_wf04",
+      "directory": "workflows\\de_local_08_wf04",
+      "source_key": "d10",
+      "actual_execution_accepted": false
+    }
+  ],
+  "knowledge_obligations": [
+    {
+      "key": "metric_contract",
+      "title": "本店经营导出字段与核算口径合同",
+      "kind": "customer_fact",
+      "supply": "customer_configuration",
+      "consumers": [
+        "d4",
+        "d5",
+        "d6",
+        "d8",
+        "d9",
+        "d10"
+      ],
+      "content_requirements": [
+        "由客户提供台账与授权后台导出样本，确认营业日边界、币种、营收含税及退款归属、订单去重、访客定义、核销和差评字段映射，记录来源与核对人。",
+        "保留日级date/revenue/orders/visitors/refunds及同期来源，派生公式为营收除订单、订单除访客、退款额除营收；零分母处理与跨源重复消除尚需客户及脚本契约确认。",
+        "历史基线与实际本周/上周数据须本店隔离，原占位模板和示例不是客户事实。"
+      ],
+      "evidence": {
+        "source_key": "d5",
+        "quote": "数据口径以门店台账与平台后台为准"
+      },
+      "id": "daily-report-zh:knowledge:metric_contract",
+      "normalized_kind": "template",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "source_register",
+      "title": "客户数据源授权与到数责任台账",
+      "kind": "customer_fact",
+      "supply": "customer_configuration",
+      "consumers": [
+        "d6",
+        "d9"
+      ],
+      "content_requirements": [
+        "由客户平台管理员提供源、官方API或自行导出路径、授权范围与有效期凭据、责任人、最近同步、应到/实到字段及每日到数。",
+        "配置最小字段集、营业结束确认、续期责任人、补数路径和月度变更记录；不收集密钥正文，不跨客户复用授权配置。"
+      ],
+      "evidence": {
+        "source_key": "d6",
+        "quote": "未授权的源**一律不得采集**"
+      },
+      "id": "daily-report-zh:knowledge:source_register",
+      "normalized_kind": "template",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "detection_rules",
+      "title": "四规则检测与假阳性拦截规范",
+      "kind": "specification",
+      "supply": "source_supported",
+      "consumers": [
+        "d4",
+        "d7",
+        "d8",
+        "d10"
+      ],
+      "content_requirements": [
+        "从d4提取R1至R4公式、样本回退、星期对齐、同比冲突优先级、缺日断链、特殊期和小样本拦截及级别处置。",
+        "每条结果保存指标、日期、基线、实际值、规则版本、判定与排查项；须向父任务补取schema和脚本，核实边界值、统计窗口及行业基准实现。",
+        "源中行业范围与周末波动比例仅作待验证参考，不作为已验证普适事实。"
+      ],
+      "evidence": {
+        "source_key": "d4",
+        "quote": "同比与环比冲突时以同比为准"
+      },
+      "id": "daily-report-zh:knowledge:detection_rules",
+      "normalized_kind": "specification",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "store_context",
+      "title": "本店特殊期、历史参照与行动约束",
+      "kind": "customer_fact",
+      "supply": "customer_configuration",
+      "consumers": [
+        "d4",
+        "d5",
+        "d8",
+        "d10"
+      ],
+      "content_requirements": [
+        "由店主提供品类、开业日期、促销记录、所在地节假日、上周同星期及去年同期导出，标注证据日期与适用门店。",
+        "提供责任人、预算上限、可执行范围；行业淡旺季另向平台或行业权威取得带时间地域的参照，不能替代本店实绩。"
+      ],
+      "evidence": {
+        "source_key": "d2",
+        "quote": "本店历史经营数据（趋势基线）；行业淡旺季参照表（平台侧）。"
+      },
+      "id": "daily-report-zh:knowledge:store_context",
+      "normalized_kind": "template",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "report_template",
+      "title": "经营日报可编辑交付与证据表达模板",
+      "kind": "template",
+      "supply": "source_supported",
+      "consumers": [
+        "d5",
+        "d8"
+      ],
+      "content_requirements": [
+        "从d5、d8整理结论、三数、单提醒、唯一行动及Word/Excel/JSON字段，区分摘要正文和全量明细。",
+        "规定参照缺失写法、健康区间与检测判定分栏、事实与待验证归因分栏、确认异常证据链接、人工复核栏和AI标识。",
+        "归因与排查方向必须能回到导出行或检测结果；不沿用示例因果断言或效果承诺。"
+      ],
+      "evidence": {
+        "source_key": "d5",
+        "quote": "每个数字都要有参照物"
+      },
+      "id": "daily-report-zh:knowledge:report_template",
+      "normalized_kind": "template",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "alert_policy",
+      "title": "本店预警静默、去重及升级配置",
+      "kind": "customer_fact",
+      "supply": "customer_configuration",
+      "consumers": [
+        "d7"
+      ],
+      "content_requirements": [
+        "由门店负责人提供push_levels、channels、silent_hours、on_call、dedup_window_hours及escalate_if_no_ack_minutes。",
+        "补齐时区、去重持久化键、确认回执、负责人替补和失败补发责任；默认12小时、30分钟及07:00汇总须经客户确认，不代表连接已开通。"
+      ],
+      "evidence": {
+        "source_key": "d7",
+        "quote": "同指标在去重窗口内不重复打扰"
+      },
+      "id": "daily-report-zh:knowledge:alert_policy",
+      "normalized_kind": "template",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "weekly_method",
+      "title": "周汇总星期结构与单行动优先级",
+      "kind": "method",
+      "supply": "source_supported",
+      "consumers": [
+        "d10"
+      ],
+      "content_requirements": [
+        "从d10取得周汇总、派生公式、周环比缺失处理、星期结构样本数和五级优先序。",
+        "行动模板保留责任人/动作/范围/选取理由与零预算限制；渠道调整仅形成建议，需额外渠道效率事实才能确定具体对象。"
+      ],
+      "evidence": {
+        "source_key": "d10",
+        "quote": "按 5 级优先级命中第一条即停"
+      },
+      "id": "daily-report-zh:knowledge:weekly_method",
+      "normalized_kind": "method",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "key": "privacy_release",
+      "title": "经营数据最小化与人工交付规范核验",
+      "kind": "standard",
+      "supply": "needs_authoritative_source",
+      "consumers": [
+        "d6",
+        "d7",
+        "d8",
+        "d9"
+      ],
+      "content_requirements": [
+        "由父任务取得现行权威个人信息处理、AI内容标识及适用平台规则，核实版本和适用范围，不直接认可仓库合规声明。",
+        "业务控制涵盖六类个人信息入库前剔除、原始文件不入仓不外传、商业明细访问范围、员工绩效不下发及人工审核记录；客户配置保存期限与接收者权限。",
+        "保留已清理副本与源数据不改写的边界、残留核验、发布前人工确认及打回记录。"
+      ],
+      "evidence": {
+        "source_key": "d6",
+        "quote": "不做\"先存再脱敏\""
+      },
+      "id": "daily-report-zh:knowledge:privacy_release",
+      "normalized_kind": "standard",
+      "customer_facts_supplied": false,
+      "content_acceptance": "pending_employee_production"
+    }
+  ],
+  "source_conflicts": [
+    {
+      "issue": "接入降级允许估算营收和行业替代，下游检测、日报与周建议禁止估算；且核销金额乘客单价的单位含义未说明。",
+      "resolution": "保留原降级能力为待核方案，返回父任务澄清公式及可用范围；真实经营链路不以估算填充必需实绩。",
+      "evidence": {
+        "source_key": "d6",
+        "quote": "用「团购核销金额 × 客单价」估算"
+      }
+    },
+    {
+      "issue": "纯提示词、无运行依赖的员工描述与原技能真实执行脚本要求不一致。",
+      "resolution": "区分草稿分析与实际计算交付；原脚本义务不降级，本次只提出方案，补取代码和执行证据后才能验收文件。",
+      "evidence": {
+        "source_key": "d4",
+        "quote": "必须真实运行脚本"
+      }
+    },
+    {
+      "issue": "采集对未授权源可给警告，但同时禁止采集；个人信息命中后的门禁重评及人工确认与允许下游字段关系不够明确。",
+      "resolution": "未授权源停用，个人信息清理后重检；不得把告警状态或人工批准当作授权，也不得仅凭门禁字段放行。",
+      "evidence": {
+        "source_key": "d9",
+        "quote": "未授权源不得采集"
+      }
+    },
+    {
+      "issue": "预警叙述含客流骤降、差评激增和核销异常，但检测核心输入未提供差评和核销的量化规则。",
+      "resolution": "保留业务需求为缺口，补取对应真实字段、基线与判定规则；不得声称现有四指标已覆盖三类业务异常。",
+      "evidence": {
+        "source_key": "d7",
+        "quote": "客流骤降 / 差评激增 / 核销异常"
+      }
+    },
+    {
+      "issue": "secondary合同复用brief-generator与data-ingest-adapter，而primary使用仓内技能；其正文未提供。",
+      "resolution": "d11的日报、采集、预警和周建议为重复职责；新增外部依赖解析及Spec/Mock权限声明核对义务，不冒充已读取外部Skill或自动替换primary。",
+      "evidence": {
+        "source_key": "d11",
+        "quote": "开源侧只发 Spec + Mock + 权限声明"
+      }
+    },
+    {
+      "issue": "员工合同手填三个数不足以满足四指标重算和真实异常检测；100%准时、ROI及示例实跑不是当前效果证据。",
+      "resolution": "手填路径仅可形成明确缺项草稿；完整验收需真实授权导出、调度与交付记录，不以示例或占位知识计完成。",
+      "evidence": {
+        "source_key": "d2",
+        "quote": "Mock 期支持手工填报 3 个数字"
+      }
+    }
+  ],
+  "external_requirements": [
+    {
+      "operation": "取得真实经营导出并核对口径",
+      "requirement": "由客户提供授权范围内、入库前去除个人信息的导出与字段说明、对账记录及历史参照；本次无客户数据或连接凭据。",
+      "evidence": {
+        "source_key": "d6",
+        "quote": "本技能**不连接任何外部系统**"
+      }
+    },
+    {
+      "operation": "验证计算和可编辑文件交付",
+      "requirement": "由父任务在获授权环境补取脚本、schema、依赖及执行日志，真实运行并核对JSON、Excel、Word、PNG一致性和文件可编辑性；此处不执行、不写盘。",
+      "evidence": {
+        "source_key": "d6",
+        "quote": "禁止自己编造 xlsx / png / json 内容或声称\"已生成\""
+      }
+    },
+    {
+      "operation": "落实入库前清理",
+      "requirement": "客户或获授权执行方对导出工作副本实际剔除敏感字段并出具残留检查证据；本只读分析不得删除或修改任何数据。",
+      "evidence": {
+        "source_key": "d6",
+        "quote": "脱敏命中项要**真的从数据集删除字段**，不是只打个标记"
+      }
+    },
+    {
+      "operation": "调度、人工审核与消息交付",
+      "requirement": "父任务补齐调度器、时区、审核人、真实确认记录及经授权消息渠道；发布、升级、归档与动作执行均另需授权，不将预览或候选清单计作已送达。",
+      "evidence": {
+        "source_key": "d7",
+        "quote": "仍失败则只留痕，标\"待人工补发\"，**不声称已发送**"
+      }
+    },
+    {
+      "operation": "核现行权威规范和平台要求",
+      "requirement": "由父任务取得现行权威及平台规则核实个人信息、AI标识与发布要求；仓库自述合法合规和平台兼容性均不能作为验证结论。",
+      "evidence": {
+        "source_key": "d9",
+        "quote": "请按所在平台要求完成 AI 生成内容标识"
+      }
+    }
+  ],
+  "employee_level_consumers": [],
+  "required_targets": [
+    "deepagents"
+  ],
+  "original_knowledge_mappings": [
+    {
+      "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/01-业务基础.md",
+      "path": "knowledge/wiki/entries/01-业务基础.md",
+      "git_blob": "c9b70ab476977cef96575cd3728ff9a533f7e2c9",
+      "role": "business_knowledge_entry",
+      "content_status": "retrieved",
+      "declared_placeholder": true,
+      "production_status": "pending",
+      "consumer_status": "pending",
+      "replacement_obligation_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+      "old_content_is_customer_fact": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/02-目标用户.md",
+      "path": "knowledge/wiki/entries/02-目标用户.md",
+      "git_blob": "17ab7f0752066da4c015a2a81f787267e0504d94",
+      "role": "business_knowledge_entry",
+      "content_status": "retrieved",
+      "declared_placeholder": true,
+      "production_status": "pending",
+      "consumer_status": "pending",
+      "replacement_obligation_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+      "old_content_is_customer_fact": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/03-语气与人设.md",
+      "path": "knowledge/wiki/entries/03-语气与人设.md",
+      "git_blob": "72d35fffac5a1a522a886b3157b852b63b30c2a0",
+      "role": "business_knowledge_entry",
+      "content_status": "retrieved",
+      "declared_placeholder": true,
+      "production_status": "pending",
+      "consumer_status": "pending",
+      "replacement_obligation_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+      "old_content_is_customer_fact": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/04-历史资产.md",
+      "path": "knowledge/wiki/entries/04-历史资产.md",
+      "git_blob": "f510d4f7bb43571f6426bf8f2c42dcc3e5a7b75b",
+      "role": "business_knowledge_entry",
+      "content_status": "retrieved",
+      "declared_placeholder": true,
+      "production_status": "pending",
+      "consumer_status": "pending",
+      "replacement_obligation_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+      "old_content_is_customer_fact": false,
+      "content_acceptance": "pending_employee_production"
+    },
+    {
+      "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/05-规则手册.md",
+      "path": "knowledge/wiki/entries/05-规则手册.md",
+      "git_blob": "9988ad00d2d52702c353bb63e1f130572d6480a4",
+      "role": "business_knowledge_entry",
+      "content_status": "retrieved",
+      "declared_placeholder": true,
+      "production_status": "pending",
+      "consumer_status": "pending",
+      "replacement_obligation_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+      "old_content_is_customer_fact": false,
+      "content_acceptance": "pending_employee_production"
+    }
+  ],
+  "preparation_only": true,
+  "installation_accepted": false,
+  "business_accepted": false
+}

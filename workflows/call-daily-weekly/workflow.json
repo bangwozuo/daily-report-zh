@@ -1,0 +1,18 @@
+{
+  "id": "workflow-call-daily-weekly",
+  "name": "周度建议",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "employee_id": "employee-daily-report-zh",
+  "action": "weekly",
+  "native_release": {
+    "production_run_id": "run_35a2c2f0040d4aa79698",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "aee7bb525797ef92083783632b59792242144c34777a29c56ce04939571da087",
+    "test_plan_sha256": "a2e6208a5609dfd49c7c67b83ca5c96c841e53178f211203ab3b1545eb67570a",
+    "id": "daily-report-zh:workflow:de_local_08_wf04",
+    "source_key": "d10",
+    "action": "weekly"
+  },
+  "host_creates_second_checkpoint": false
+}

@@ -1,0 +1,18 @@
+{
+  "id": "workflow-call-daily-alert",
+  "name": "异常提醒草稿",
+  "version": "0.2.0-rc.1",
+  "kind": "workflow_call",
+  "employee_id": "employee-daily-report-zh",
+  "action": "alert",
+  "native_release": {
+    "production_run_id": "run_91d0cbef0b8949debae7",
+    "project_id": "prj_e9adecb93e4845b3b157",
+    "code_sha256": "6319bd4d15a40d1c9c4840729eaee1b635476a41338b36d298ad5751a46299d1",
+    "test_plan_sha256": "cbe679bc98f72683479b009318e01959dc40f535e725ad875fa91c3545473f04",
+    "id": "daily-report-zh:workflow:de_local_08_wf03",
+    "source_key": "d7",
+    "action": "alert"
+  },
+  "host_creates_second_checkpoint": false
+}

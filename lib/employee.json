@@ -1,0 +1,2528 @@
+{
+  "id": "employee-daily-report-zh",
+  "name": "经营日报员",
+  "version": "0.2.0-rc.1",
+  "description": "核对获权经营资料，归集四指标、检测异常并生成可编辑日报与周建议，保留缺项、来源和人工决定。",
+  "role": {
+    "title": "经营日报员",
+    "aliases": [
+      "经营日报师"
+    ],
+    "department": "store-operations",
+    "responsibilities": [
+      "来源体检",
+      "异常检测",
+      "日报文案",
+      "经营数据归集",
+      "经营日报",
+      "异常提醒草稿",
+      "周度建议"
+    ]
+  },
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "source_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "metrics_ref": {
+        "type": "object",
+        "properties": {
+          "artifact_id": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "artifact_id",
+          "revision",
+          "sha256"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "operation"
+    ],
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "status",
+      "staff_id",
+      "operation",
+      "output",
+      "files",
+      "data_origin"
+    ],
+    "properties": {
+      "status": {
+        "enum": [
+          "draft",
+          "needs_input",
+          "blocked"
+        ]
+      },
+      "staff_id": {
+        "const": "daily-report-zh"
+      },
+      "operation": {
+        "enum": [
+          "sync",
+          "detect",
+          "copy",
+          "collect",
+          "daily",
+          "alert",
+          "weekly"
+        ]
+      },
+      "output": {
+        "type": "object"
+      },
+      "files": {
+        "type": "array"
+      },
+      "data_origin": {
+        "type": "string"
+      }
+    }
+  },
+  "skills": [
+    {
+      "id": "skill-store-data-sync",
+      "name": "来源体检",
+      "version": "0.2.0-rc.1",
+      "kind": "generic",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "sync"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "对客户授权经营导出的来源、字段映射、到数覆盖及个人信息风险形成接入体检，不冒充实际连接器。",
+      "conditions": [
+        "需要来源、接入方式、授权、责任人、最近同步、应到/实到字段、每日到数和经预处理抽样。",
+        "原能力包括缺字段降级路径、授权巡检及脱敏字段实际剔除；本次只能分析义务，不执行删除或外部接入。",
+        "估算降级与下游禁止估算冲突须返回父任务确认，估算值不得冒充真实经营实绩。"
+      ],
+      "acceptance": [
+        "四类校验分别有证据：字段低于80%提示、低于50%源不可用；连续两天断供提醒，不补零。",
+        "六类个人信息在入库前拦截；红线源下游前剔除，未授权不得采集，超过24小时同步仅提示可能到期，不冒充真实授权验证。",
+        "交付五页签接入清单、完整率及到数两张PNG、sync.json；每个缺字段列实际下游影响和可行补齐路径。",
+        "保留21:30收数、21:35校验、21:40脱敏、21:45交付、周一授权巡检及月初字段集复盘责任点。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "skills/store-data-sync/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:skill:store-data-sync",
+        "original_id": "store-data-sync",
+        "version": "1.0.0",
+        "purpose": "对客户授权经营导出的来源、字段映射、到数覆盖及个人信息风险形成接入体检，不冒充实际连接器。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "skills/store-data-sync/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a"
+        },
+        "source_text_sha256": "6d9ca66840cbed2b0b800c68c015e7976a3ec145aaf0601456ea1e5916d7c21a",
+        "production_form": "combination",
+        "conditions": [
+          "需要来源、接入方式、授权、责任人、最近同步、应到/实到字段、每日到数和经预处理抽样。",
+          "原能力包括缺字段降级路径、授权巡检及脱敏字段实际剔除；本次只能分析义务，不执行删除或外部接入。",
+          "估算降级与下游禁止估算冲突须返回父任务确认，估算值不得冒充真实经营实绩。"
+        ],
+        "acceptance": [
+          "四类校验分别有证据：字段低于80%提示、低于50%源不可用；连续两天断供提醒，不补零。",
+          "六类个人信息在入库前拦截；红线源下游前剔除，未授权不得采集，超过24小时同步仅提示可能到期，不冒充真实授权验证。",
+          "交付五页签接入清单、完整率及到数两张PNG、sync.json；每个缺字段列实际下游影响和可行补齐路径。",
+          "保留21:30收数、21:35校验、21:40脱敏、21:45交付、周一授权巡检及月初字段集复盘责任点。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "sync",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d6",
+        "asset_id": "daily-report-zh:skill:store-data-sync",
+        "action": "sync",
+        "production_run_id": "run_0936f0e488a4464799d5",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-sync-1.0.0-run_0936f0e488a4464799d5",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\sync\\evaluation-original.json",
+        "business_evaluation_sha256": "98c33dde3cbebd66451774aceedb51e4a33ea5f7ec3e3bd6b13e1cd9a9cae600",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "skills/store-data-sync",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE"
+        ]
+      }
+    },
+    {
+      "id": "skill-anomaly-detect",
+      "name": "异常检测",
+      "version": "0.2.0-rc.1",
+      "kind": "generic",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "detect"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "对真实日指标重算派生值，执行四规则异常检测，保留拦截证据并提出逐项排查方向。",
+      "conditions": [
+        "输入门店、日营收/订单/访客/退款额及区间；开业日、促销日、节假日、去年同期与阈值覆盖须有来源。",
+        "保留R1营收下降20%、转化率1.5%、退款率5%规则，R2两倍标准差及不足14天回退IQR，R3连续至少3天且累计超过10%，R4同比优先并标冲突。",
+        "真实脚本执行为原必需条件；本次未提供脚本正文、执行凭据或客户数据，不能声称已检测或生成文件。"
+      ],
+      "acceptance": [
+        "星期对齐；特殊期与新店30天保护期拦截，低于20单仅报比率值，缺日不补零且比较断开。",
+        "summary、alerts、data_quality可追溯到detect.json；确认异常各含一条可执行排查项，拦截项仍留存原因。",
+        "交付五页签异常预警清单Excel、双轴趋势PNG与JSON；分高中低及拦截级别，标AI辅助并待人工复核。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:store_context"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "skills/anomaly-detect/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "aaf6084dc642f32e536c797e2a3bc62ee5c1863116ceb22eae64a6734fdf3e67"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:skill:anomaly-detect",
+        "original_id": "anomaly-detect",
+        "version": "1.0.0",
+        "purpose": "对真实日指标重算派生值，执行四规则异常检测，保留拦截证据并提出逐项排查方向。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "skills/anomaly-detect/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "aaf6084dc642f32e536c797e2a3bc62ee5c1863116ceb22eae64a6734fdf3e67"
+        },
+        "source_text_sha256": "aaf6084dc642f32e536c797e2a3bc62ee5c1863116ceb22eae64a6734fdf3e67",
+        "production_form": "combination",
+        "conditions": [
+          "输入门店、日营收/订单/访客/退款额及区间；开业日、促销日、节假日、去年同期与阈值覆盖须有来源。",
+          "保留R1营收下降20%、转化率1.5%、退款率5%规则，R2两倍标准差及不足14天回退IQR，R3连续至少3天且累计超过10%，R4同比优先并标冲突。",
+          "真实脚本执行为原必需条件；本次未提供脚本正文、执行凭据或客户数据，不能声称已检测或生成文件。"
+        ],
+        "acceptance": [
+          "星期对齐；特殊期与新店30天保护期拦截，低于20单仅报比率值，缺日不补零且比较断开。",
+          "summary、alerts、data_quality可追溯到detect.json；确认异常各含一条可执行排查项，拦截项仍留存原因。",
+          "交付五页签异常预警清单Excel、双轴趋势PNG与JSON；分高中低及拦截级别，标AI辅助并待人工复核。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "detect",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d4",
+        "asset_id": "daily-report-zh:skill:anomaly-detect",
+        "action": "detect",
+        "production_run_id": "run_da1cbba3982e4f03a992",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-detect-1.0.0-run_da1cbba3982e4f03a992",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\detect\\evaluation-original.json",
+        "business_evaluation_sha256": "f7b68f0fe661ed4249c5b86f1f7c3d26f146c6d5acbb6b8c416481e37d191bc2",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "skills/anomaly-detect",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE"
+        ]
+      }
+    },
+    {
+      "id": "skill-daily-report-copy",
+      "name": "日报文案",
+      "version": "0.2.0-rc.1",
+      "kind": "generic",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "copy"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "将已核对指标和已确认异常转为可编辑日报、指标明细与明日排查行动。",
+      "conditions": [
+        "接收原始四指标、报告期、同星期对比、特殊期、店龄及确认异常；不承担接入校验或重新检测。",
+        "数值、健康区间与关键数选择需report_copy.py真实结果；缺对比不编造，归因不得从统计相关直接写成已证实原因。"
+      ],
+      "acceptance": [
+        "结论不超过40字，正文不超过200字；营收必选，依退款率、转化率、客单价偏离优先序取三个数，每数附参照或明确缺口。",
+        "最多一句提醒、一个不超过60字且含责任人/动作/范围的建议；特殊期、新店与小样本不写异常。",
+        "交付五章节经营日报.docx、五页签日报数据摘要.xlsx与report_copy.json，保留全部指标和异常证据，人工复核前不发布。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:store_context"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "skills/daily-report-copy/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:skill:daily-report-copy",
+        "original_id": "daily-report-copy",
+        "version": "1.0.0",
+        "purpose": "将已核对指标和已确认异常转为可编辑日报、指标明细与明日排查行动。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "skills/daily-report-copy/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108"
+        },
+        "source_text_sha256": "ec00b96b52cdeb551358ec28cf2b5d0f90ed422fec4c4933f035d4a6ad585108",
+        "production_form": "combination",
+        "conditions": [
+          "接收原始四指标、报告期、同星期对比、特殊期、店龄及确认异常；不承担接入校验或重新检测。",
+          "数值、健康区间与关键数选择需report_copy.py真实结果；缺对比不编造，归因不得从统计相关直接写成已证实原因。"
+        ],
+        "acceptance": [
+          "结论不超过40字，正文不超过200字；营收必选，依退款率、转化率、客单价偏离优先序取三个数，每数附参照或明确缺口。",
+          "最多一句提醒、一个不超过60字且含责任人/动作/范围的建议；特殊期、新店与小样本不写异常。",
+          "交付五章节经营日报.docx、五页签日报数据摘要.xlsx与report_copy.json，保留全部指标和异常证据，人工复核前不发布。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:store_context"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "copy",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d5",
+        "asset_id": "daily-report-zh:skill:daily-report-copy",
+        "action": "copy",
+        "production_run_id": "run_88d162688cd34bd1a979",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-copy-1.0.0-run_88d162688cd34bd1a979",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\copy\\evaluation-original.json",
+        "business_evaluation_sha256": "7cda0f1f3095c1cb08ba2d4c4b7a44b7c503cab2aceb3a575be7c7034ead4db3",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "skills/daily-report-copy",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE"
+        ]
+      }
+    },
+    {
+      "id": "skill-call-daily-collect",
+      "name": "经营数据归集",
+      "version": "0.2.0-rc.1",
+      "kind": "workflow_call",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "collect"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "编排导出接入体检、门禁、逐源归集和断供台账，向下游提供可追溯的资格材料。",
+      "conditions": [
+        "每日21:30外部收数；需要源配置、区间、每日到数、预处理样本和采集策略，实际搬运由客户完成。",
+        "必须真实调用sync.py且取得剔除个人信息的执行证据；未授权数据不可因告警级状态而进入分析。",
+        "本次不判定放行；缺执行和人工确认材料返回父任务。"
+      ],
+      "acceptance": [
+        "空源停止；红线源阻断下游，不以剔除建议代替已完成清理；人工未确认维持待确认。",
+        "归集单列已归集/待补齐/已剔除、门禁理由、源清单、断供明细及汇总；低于50%不可用，断供日原样保留。",
+        "交付采集归集单.xlsx、collect.json及sync原始产物；downstream_allowed必须与阻断和人工确认状态一致。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:source_register",
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "workflows/store-data-collect-flow/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:workflow:de_local_08_wf01",
+        "original_id": "de_local_08_wf01",
+        "version": "1.0.0",
+        "purpose": "编排导出接入体检、门禁、逐源归集和断供台账，向下游提供可追溯的资格材料。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "workflows/store-data-collect-flow/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09"
+        },
+        "source_text_sha256": "3775671be96c907ec365fb9b16111e8ec9b16ebcc7eb9fe9db433b528e15ec09",
+        "production_form": "workflow",
+        "conditions": [
+          "每日21:30外部收数；需要源配置、区间、每日到数、预处理样本和采集策略，实际搬运由客户完成。",
+          "必须真实调用sync.py且取得剔除个人信息的执行证据；未授权数据不可因告警级状态而进入分析。",
+          "本次不判定放行；缺执行和人工确认材料返回父任务。"
+        ],
+        "acceptance": [
+          "空源停止；红线源阻断下游，不以剔除建议代替已完成清理；人工未确认维持待确认。",
+          "归集单列已归集/待补齐/已剔除、门禁理由、源清单、断供明细及汇总；低于50%不可用，断供日原样保留。",
+          "交付采集归集单.xlsx、collect.json及sync原始产物；downstream_allowed必须与阻断和人工确认状态一致。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "collect",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d9",
+        "asset_id": "daily-report-zh:workflow:de_local_08_wf01",
+        "action": "collect",
+        "production_run_id": "run_bcde82f6c9cb4786b002",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-collect-1.0.0-run_bcde82f6c9cb4786b002",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\collect\\evaluation-original.json",
+        "business_evaluation_sha256": "7437659693180cbdb7e3c8cccae61318fc609067b95bbcb8004cbf2662068a99",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "workflows/call-daily-collect",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE",
+          "workflow.json"
+        ]
+      }
+    },
+    {
+      "id": "skill-call-daily-generate",
+      "name": "经营日报",
+      "version": "0.2.0-rc.1",
+      "kind": "workflow_call",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "daily"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "串联当日检测、指标核算、三数提炼与可编辑日报和明细交付。",
+      "conditions": [
+        "每日22:00打烊后需外部调度，输入门店、品类、报告日期、日序列、对比和交付配置。",
+        "先取得采集门禁与真实异常检测结果，再采用日报表达口径；当前无执行环境、文件或确认凭据。"
+      ],
+      "acceptance": [
+        "空指标停止，不生成空日报；缺对比列无对比口径且结论不写幅度，不用前一天顶替。",
+        "只引用当日确认异常，重算派生指标，关键数不超过三个、正文不超过200字；无确认异常不硬造问题，特殊期与小样本豁免生效。",
+        "交付含趋势图的经营日报.docx、经营日报.xlsx、report_flow.json及检测证据；建议含责任人/动作/范围。",
+        "人工打回返回结论建议步骤；未经确认不得对外汇报或归档为已审核成果。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:report_template",
+        "daily-report-zh:knowledge:store_context",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "workflows/daily-report-generate-flow/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "a151b7c5809c7bd994e95361ab4c631b34ed9eb87426b043c30adbf17a7aa654"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:workflow:de_local_08_wf02",
+        "original_id": "de_local_08_wf02",
+        "version": "1.0.0",
+        "purpose": "串联当日检测、指标核算、三数提炼与可编辑日报和明细交付。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "workflows/daily-report-generate-flow/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "a151b7c5809c7bd994e95361ab4c631b34ed9eb87426b043c30adbf17a7aa654"
+        },
+        "source_text_sha256": "a151b7c5809c7bd994e95361ab4c631b34ed9eb87426b043c30adbf17a7aa654",
+        "production_form": "workflow",
+        "conditions": [
+          "每日22:00打烊后需外部调度，输入门店、品类、报告日期、日序列、对比和交付配置。",
+          "先取得采集门禁与真实异常检测结果，再采用日报表达口径；当前无执行环境、文件或确认凭据。"
+        ],
+        "acceptance": [
+          "空指标停止，不生成空日报；缺对比列无对比口径且结论不写幅度，不用前一天顶替。",
+          "只引用当日确认异常，重算派生指标，关键数不超过三个、正文不超过200字；无确认异常不硬造问题，特殊期与小样本豁免生效。",
+          "交付含趋势图的经营日报.docx、经营日报.xlsx、report_flow.json及检测证据；建议含责任人/动作/范围。",
+          "人工打回返回结论建议步骤；未经确认不得对外汇报或归档为已审核成果。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "daily",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d8",
+        "asset_id": "daily-report-zh:workflow:de_local_08_wf02",
+        "action": "daily",
+        "production_run_id": "run_a0f8902fa30942248045",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-daily-1.0.0-run_a0f8902fa30942248045",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\daily\\evaluation-original.json",
+        "business_evaluation_sha256": "e13247e6147c884664d748914def08fc17f4e099d368b66adbc988b90b0a34ab",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "workflows/call-daily-generate",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE",
+          "workflow.json"
+        ]
+      }
+    },
+    {
+      "id": "skill-call-daily-alert",
+      "name": "异常提醒草稿",
+      "version": "0.2.0-rc.1",
+      "kind": "workflow_call",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "alert"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "将检测证据编排为分级预警清单、抑制台账与待人工确认的消息预览，保留后续推送升级义务。",
+      "conditions": [
+        "指标越界或每日21:50触发须由外部调度提供；先取得采集门禁和真实detect.json。",
+        "需要客户级渠道、值班人、免打扰、去重窗口及超时升级策略；无渠道配置不视默认机器人可用。",
+        "当前不发送、不升级、不启动定时任务；实际送达和确认回执均缺失。"
+      ],
+      "acceptance": [
+        "仅确认异常按级别入候选清单；拦截、只报值、级别不足、默认12小时同指标去重均留抑制原因。",
+        "静默时段挂起至次日07:00；默认30分钟未确认升级负责人，仍未确认只留痕，发送失败待人工补发。",
+        "交付预警推送单.xlsx、推送消息预览.md、alert_flow.json及检测原产物；每条含日期、指标、实际值、证据和升级期限。",
+        "pushed仅表示进入推送清单，不作为真实送达数；脚本不得自动发送，人工确认不可省略。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:alert_policy",
+        "daily-report-zh:knowledge:privacy_release"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "workflows/anomaly-alert-flow/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "134c593686d270b495f9b912ed211b8ce7e21ad0e5083900b1c8e025b146f875"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:workflow:de_local_08_wf03",
+        "original_id": "de_local_08_wf03",
+        "version": "1.0.0",
+        "purpose": "将检测证据编排为分级预警清单、抑制台账与待人工确认的消息预览，保留后续推送升级义务。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "workflows/anomaly-alert-flow/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "134c593686d270b495f9b912ed211b8ce7e21ad0e5083900b1c8e025b146f875"
+        },
+        "source_text_sha256": "134c593686d270b495f9b912ed211b8ce7e21ad0e5083900b1c8e025b146f875",
+        "production_form": "workflow",
+        "conditions": [
+          "指标越界或每日21:50触发须由外部调度提供；先取得采集门禁和真实detect.json。",
+          "需要客户级渠道、值班人、免打扰、去重窗口及超时升级策略；无渠道配置不视默认机器人可用。",
+          "当前不发送、不升级、不启动定时任务；实际送达和确认回执均缺失。"
+        ],
+        "acceptance": [
+          "仅确认异常按级别入候选清单；拦截、只报值、级别不足、默认12小时同指标去重均留抑制原因。",
+          "静默时段挂起至次日07:00；默认30分钟未确认升级负责人，仍未确认只留痕，发送失败待人工补发。",
+          "交付预警推送单.xlsx、推送消息预览.md、alert_flow.json及检测原产物；每条含日期、指标、实际值、证据和升级期限。",
+          "pushed仅表示进入推送清单，不作为真实送达数；脚本不得自动发送，人工确认不可省略。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "alert",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d7",
+        "asset_id": "daily-report-zh:workflow:de_local_08_wf03",
+        "action": "alert",
+        "production_run_id": "run_91d0cbef0b8949debae7",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-alert-1.0.0-run_91d0cbef0b8949debae7",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\alert\\evaluation-original.json",
+        "business_evaluation_sha256": "771b3198c28f4160cd6d1878a3ebcfd4aae2aeca7ee965c4702e294ed23efd0d",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "workflows/call-daily-alert",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE",
+          "workflow.json"
+        ]
+      }
+    },
+    {
+      "id": "skill-call-daily-weekly",
+      "name": "周度建议",
+      "version": "0.2.0-rc.1",
+      "kind": "workflow_call",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "const": "weekly"
+          },
+          "source_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          },
+          "metrics_ref": {
+            "type": "object",
+            "properties": {
+              "artifact_id": {
+                "type": "string"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "artifact_id",
+              "revision",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "operation"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "status",
+          "staff_id",
+          "operation",
+          "output",
+          "files",
+          "data_origin"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "draft",
+              "needs_input",
+              "blocked"
+            ]
+          },
+          "staff_id": {
+            "const": "daily-report-zh"
+          },
+          "operation": {
+            "enum": [
+              "sync",
+              "detect",
+              "copy",
+              "collect",
+              "daily",
+              "alert",
+              "weekly"
+            ]
+          },
+          "output": {
+            "type": "object"
+          },
+          "files": {
+            "type": "array"
+          },
+          "data_origin": {
+            "type": "string"
+          }
+        }
+      },
+      "purpose": "保留周度汇总、星期结构和唯一重点行动能力，作为日报链路之外的独立周建议流程。",
+      "conditions": [
+        "周一09:00需外部触发；客户提供本周区间完整日指标、可选上周汇总、责任人和预算约束。",
+        "先过采集门禁并真实调用检测；不预测营收、不执行渠道暂停、资金转移或老客召回。"
+      ],
+      "acceptance": [
+        "公式汇总营收/订单/访客/退款及派生指标，缺上周显示空缺而不估算；星期结构列样本天数，单日样本不得冒充多日可比。",
+        "按高异常、退款率超过3%、转化率低于2%、周营收下降至少10%、维持的优先序命中即停，只给一个含责任人/动作/范围的重点行动。",
+        "零预算约束实际生效，打回返回行动选择；交付周度经营建议.docx、周度汇总.xlsx、周对比图.png、weekly_flow.json并待人工确认。"
+      ],
+      "knowledge_ids": [
+        "daily-report-zh:knowledge:metric_contract",
+        "daily-report-zh:knowledge:detection_rules",
+        "daily-report-zh:knowledge:weekly_method",
+        "daily-report-zh:knowledge:store_context"
+      ],
+      "source": {
+        "repository": "bangwozuo/daily-report-zh",
+        "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+        "path": "workflows/weekly-ops-advice-flow/SKILL.md",
+        "source_original": {
+          "id": "art_493d00f3a4e44ee9a4ad",
+          "revision": 1,
+          "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+        },
+        "content_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6"
+      },
+      "original_contract": {
+        "id": "daily-report-zh:workflow:de_local_08_wf04",
+        "original_id": "de_local_08_wf04",
+        "version": "1.0.0",
+        "purpose": "保留周度汇总、星期结构和唯一重点行动能力，作为日报链路之外的独立周建议流程。",
+        "source": {
+          "repository": "bangwozuo/daily-report-zh",
+          "commit": "9dd65f22f3bb99bd0197d1079d757fdfd2246cc0",
+          "path": "workflows/weekly-ops-advice-flow/SKILL.md",
+          "source_original": {
+            "id": "art_493d00f3a4e44ee9a4ad",
+            "revision": 1,
+            "sha256": "abfd78ac0b163255807f58f5a2abed1ae056b218054bbb0a586cee77fd92cdf3"
+          },
+          "content_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6"
+        },
+        "source_text_sha256": "d39612544a07fea2e231027fd2bceda5a870d09f5f57259d23765cf1f8b799a6",
+        "production_form": "workflow",
+        "conditions": [
+          "周一09:00需外部触发；客户提供本周区间完整日指标、可选上周汇总、责任人和预算约束。",
+          "先过采集门禁并真实调用检测；不预测营收、不执行渠道暂停、资金转移或老客召回。"
+        ],
+        "acceptance": [
+          "公式汇总营收/订单/访客/退款及派生指标，缺上周显示空缺而不估算；星期结构列样本天数，单日样本不得冒充多日可比。",
+          "按高异常、退款率超过3%、转化率低于2%、周营收下降至少10%、维持的优先序命中即停，只给一个含责任人/动作/范围的重点行动。",
+          "零预算约束实际生效，打回返回行动选择；交付周度经营建议.docx、周度汇总.xlsx、周对比图.png、weekly_flow.json并待人工确认。"
+        ],
+        "knowledge_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:store_context"
+        ],
+        "runtime_binding": "pending_actual_production",
+        "content_acceptance": "pending_actual_consumer_and_original_review"
+      },
+      "execution": {
+        "type": "installed-native-workflow",
+        "service_required": true,
+        "operation": "weekly",
+        "checkpoint_authority": "existing WorkflowService",
+        "independent_offline_execution": false,
+        "model_required": false
+      },
+      "current_runtime_binding": {
+        "source_key": "d10",
+        "asset_id": "daily-report-zh:workflow:de_local_08_wf04",
+        "action": "weekly",
+        "production_run_id": "run_35a2c2f0040d4aa79698",
+        "component_directory": "D:\\Agent生产引擎\\projects\\employees\\daily-report-zh\\components\\daily-report-zh-weekly-1.0.0-run_35a2c2f0040d4aa79698",
+        "installation": null,
+        "business_evaluation_file": "D:\\Agent生产引擎\\.runtime\\development\\p17-20261030\\continuation-20261030\\completion-500\\formal-role-production\\daily-report-zh\\individual-assets\\weekly\\evaluation-original.json",
+        "business_evaluation_sha256": "5128b377feaaaf9209a90503577c304c1b7383c5a1552d727a6a2a5a22df3d25",
+        "normal_and_negative_cases_executed": true,
+        "scope": "declared_synthetic_cases_not_arbitrary_customer_inputs",
+        "complete_employee": false
+      },
+      "distribution": {
+        "path": "workflows/call-daily-weekly",
+        "client_script": "scripts/product.py",
+        "required_files": [
+          "SKILL.md",
+          "definition.json",
+          "schema.json",
+          "prompt.txt",
+          "scripts/product.py",
+          "LICENSE",
+          "NOTICE",
+          "workflow.json"
+        ]
+      }
+    }
+  ],
+  "workflow": {
+    "id": "daily-role-current-source-sop",
+    "version": 1,
+    "sha256": "1d205ae1ee4821e6467e4a450a62f63655c98d5f281406ac23619daab6c43585"
+  },
+  "knowledge": {
+    "required": true,
+    "obligations": [
+      {
+        "key": "metric_contract",
+        "title": "本店经营导出字段与核算口径合同",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d4",
+          "d5",
+          "d6",
+          "d8",
+          "d9",
+          "d10"
+        ],
+        "content_requirements": [
+          "由客户提供台账与授权后台导出样本，确认营业日边界、币种、营收含税及退款归属、订单去重、访客定义、核销和差评字段映射，记录来源与核对人。",
+          "保留日级date/revenue/orders/visitors/refunds及同期来源，派生公式为营收除订单、订单除访客、退款额除营收；零分母处理与跨源重复消除尚需客户及脚本契约确认。",
+          "历史基线与实际本周/上周数据须本店隔离，原占位模板和示例不是客户事实。"
+        ],
+        "evidence": {
+          "source_key": "d5",
+          "quote": "数据口径以门店台账与平台后台为准"
+        },
+        "id": "daily-report-zh:knowledge:metric_contract",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "source_register",
+        "title": "客户数据源授权与到数责任台账",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d6",
+          "d9"
+        ],
+        "content_requirements": [
+          "由客户平台管理员提供源、官方API或自行导出路径、授权范围与有效期凭据、责任人、最近同步、应到/实到字段及每日到数。",
+          "配置最小字段集、营业结束确认、续期责任人、补数路径和月度变更记录；不收集密钥正文，不跨客户复用授权配置。"
+        ],
+        "evidence": {
+          "source_key": "d6",
+          "quote": "未授权的源**一律不得采集**"
+        },
+        "id": "daily-report-zh:knowledge:source_register",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "detection_rules",
+        "title": "四规则检测与假阳性拦截规范",
+        "kind": "specification",
+        "supply": "source_supported",
+        "consumers": [
+          "d4",
+          "d7",
+          "d8",
+          "d10"
+        ],
+        "content_requirements": [
+          "从d4提取R1至R4公式、样本回退、星期对齐、同比冲突优先级、缺日断链、特殊期和小样本拦截及级别处置。",
+          "每条结果保存指标、日期、基线、实际值、规则版本、判定与排查项；须向父任务补取schema和脚本，核实边界值、统计窗口及行业基准实现。",
+          "源中行业范围与周末波动比例仅作待验证参考，不作为已验证普适事实。"
+        ],
+        "evidence": {
+          "source_key": "d4",
+          "quote": "同比与环比冲突时以同比为准"
+        },
+        "id": "daily-report-zh:knowledge:detection_rules",
+        "normalized_kind": "specification",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "store_context",
+        "title": "本店特殊期、历史参照与行动约束",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d4",
+          "d5",
+          "d8",
+          "d10"
+        ],
+        "content_requirements": [
+          "由店主提供品类、开业日期、促销记录、所在地节假日、上周同星期及去年同期导出，标注证据日期与适用门店。",
+          "提供责任人、预算上限、可执行范围；行业淡旺季另向平台或行业权威取得带时间地域的参照，不能替代本店实绩。"
+        ],
+        "evidence": {
+          "source_key": "d2",
+          "quote": "本店历史经营数据（趋势基线）；行业淡旺季参照表（平台侧）。"
+        },
+        "id": "daily-report-zh:knowledge:store_context",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "report_template",
+        "title": "经营日报可编辑交付与证据表达模板",
+        "kind": "template",
+        "supply": "source_supported",
+        "consumers": [
+          "d5",
+          "d8"
+        ],
+        "content_requirements": [
+          "从d5、d8整理结论、三数、单提醒、唯一行动及Word/Excel/JSON字段，区分摘要正文和全量明细。",
+          "规定参照缺失写法、健康区间与检测判定分栏、事实与待验证归因分栏、确认异常证据链接、人工复核栏和AI标识。",
+          "归因与排查方向必须能回到导出行或检测结果；不沿用示例因果断言或效果承诺。"
+        ],
+        "evidence": {
+          "source_key": "d5",
+          "quote": "每个数字都要有参照物"
+        },
+        "id": "daily-report-zh:knowledge:report_template",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "alert_policy",
+        "title": "本店预警静默、去重及升级配置",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d7"
+        ],
+        "content_requirements": [
+          "由门店负责人提供push_levels、channels、silent_hours、on_call、dedup_window_hours及escalate_if_no_ack_minutes。",
+          "补齐时区、去重持久化键、确认回执、负责人替补和失败补发责任；默认12小时、30分钟及07:00汇总须经客户确认，不代表连接已开通。"
+        ],
+        "evidence": {
+          "source_key": "d7",
+          "quote": "同指标在去重窗口内不重复打扰"
+        },
+        "id": "daily-report-zh:knowledge:alert_policy",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "weekly_method",
+        "title": "周汇总星期结构与单行动优先级",
+        "kind": "method",
+        "supply": "source_supported",
+        "consumers": [
+          "d10"
+        ],
+        "content_requirements": [
+          "从d10取得周汇总、派生公式、周环比缺失处理、星期结构样本数和五级优先序。",
+          "行动模板保留责任人/动作/范围/选取理由与零预算限制；渠道调整仅形成建议，需额外渠道效率事实才能确定具体对象。"
+        ],
+        "evidence": {
+          "source_key": "d10",
+          "quote": "按 5 级优先级命中第一条即停"
+        },
+        "id": "daily-report-zh:knowledge:weekly_method",
+        "normalized_kind": "method",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "privacy_release",
+        "title": "经营数据最小化与人工交付规范核验",
+        "kind": "standard",
+        "supply": "needs_authoritative_source",
+        "consumers": [
+          "d6",
+          "d7",
+          "d8",
+          "d9"
+        ],
+        "content_requirements": [
+          "由父任务取得现行权威个人信息处理、AI内容标识及适用平台规则，核实版本和适用范围，不直接认可仓库合规声明。",
+          "业务控制涵盖六类个人信息入库前剔除、原始文件不入仓不外传、商业明细访问范围、员工绩效不下发及人工审核记录；客户配置保存期限与接收者权限。",
+          "保留已清理副本与源数据不改写的边界、残留核验、发布前人工确认及打回记录。"
+        ],
+        "evidence": {
+          "source_key": "d6",
+          "quote": "不做\"先存再脱敏\""
+        },
+        "id": "daily-report-zh:knowledge:privacy_release",
+        "normalized_kind": "standard",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      }
+    ],
+    "runtime": {
+      "production_run_id": "run_f6c09714dd174ba9aef3",
+      "project_id": "prj_dd9c7b07f2fe4a27a7c2",
+      "code_sha256": "2aa88d1efa509ed7db4d9586426357469ba0d736abb762f46f6c5934461079f7",
+      "test_plan_sha256": "1f91d292f5484a04c9b28204fde6806dd1e500b6aa68bd784aa6c088f86bc4d8"
+    },
+    "customer_facts_supplied": false
+  },
+  "experts": {
+    "enabled": false,
+    "reason": "本版处理确定性口径、规则与文件；不自动做因果归因或经营决策，复杂归因交接人工；不为岗位数量强造专家或Team"
+  },
+  "team": {
+    "required": false,
+    "reason": "本岗七项原生SOP已覆盖；跨岗协作由独立工作台编排。"
+  },
+  "trigger": {
+    "source": "server/bindings/trigger-configurations.json",
+    "automatic_external_delivery_configured": false
+  },
+  "runtime": {
+    "target": "deepagents",
+    "execution_form": "native_LangGraph_workflow_employee",
+    "source_framework": "source-quote-compatible",
+    "installation": {
+      "origin": "http://127.0.0.1:8940",
+      "project_id": "prj_e9adecb93e4845b3b157",
+      "agent_id": "daily-report-zh",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "manifest_sha256": "3d6da62216a303c37294789e6096e6b75c070602bb48d176d2d3ef87f8aa23ca"
+    },
+    "production_run_id": "run_23ed4baa464444ab8490",
+    "model_required": false
+  },
+  "distribution": {
+    "main": {
+      "path": "clients/skill/daily-report-zh",
+      "client_script": "scripts/product.py",
+      "required_files": [
+        "SKILL.md",
+        "scripts/product.py",
+        "references/connection.example.json",
+        "LICENSE",
+        "NOTICE"
+      ]
+    },
+    "canonical_sdk": "clients/sdk/daily.py",
+    "categories": {
+      "employee": 1,
+      "generic": 3,
+      "workflow": 4,
+      "remote_service": 0
+    },
+    "remote_service_reason": "本岗无独立远程Agent服务；不制造空的远程Skill。"
+  },
+  "source_scope_snapshot": {
+    "staff_id": "daily-report-zh",
+    "task": "授权真实经营导出→口径核对/汇总→可编辑日报、明细、异常证据和排查项",
+    "source_scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+    "engine_gate": {
+      "project_id": "prj_6f1f1beae0634d0ca5cb",
+      "artifact_id": "art_479ffbdf429e4a12a28b",
+      "revision": 1,
+      "sha256": "a42c046675d1309d20f9795af23b62069e3eb739b354c3887ec53c406c58fc3b",
+      "scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+      "G1_passed": true,
+      "formal_assets_complete": false
+    },
+    "assets": [
+      {
+        "id": "daily-report-zh:skill:anomaly-detect",
+        "directory": "skills\\anomaly-detect",
+        "source_key": "d4",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:skill:daily-report-copy",
+        "directory": "skills\\daily-report-copy",
+        "source_key": "d5",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:skill:store-data-sync",
+        "directory": "skills\\store-data-sync",
+        "source_key": "d6",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:workflow:de_local_08_wf03",
+        "directory": "workflows\\de_local_08_wf03",
+        "source_key": "d7",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:workflow:de_local_08_wf02",
+        "directory": "workflows\\de_local_08_wf02",
+        "source_key": "d8",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:workflow:de_local_08_wf01",
+        "directory": "workflows\\de_local_08_wf01",
+        "source_key": "d9",
+        "actual_execution_accepted": false
+      },
+      {
+        "id": "daily-report-zh:workflow:de_local_08_wf04",
+        "directory": "workflows\\de_local_08_wf04",
+        "source_key": "d10",
+        "actual_execution_accepted": false
+      }
+    ],
+    "knowledge_obligations": [
+      {
+        "key": "metric_contract",
+        "title": "本店经营导出字段与核算口径合同",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d4",
+          "d5",
+          "d6",
+          "d8",
+          "d9",
+          "d10"
+        ],
+        "content_requirements": [
+          "由客户提供台账与授权后台导出样本，确认营业日边界、币种、营收含税及退款归属、订单去重、访客定义、核销和差评字段映射，记录来源与核对人。",
+          "保留日级date/revenue/orders/visitors/refunds及同期来源，派生公式为营收除订单、订单除访客、退款额除营收；零分母处理与跨源重复消除尚需客户及脚本契约确认。",
+          "历史基线与实际本周/上周数据须本店隔离，原占位模板和示例不是客户事实。"
+        ],
+        "evidence": {
+          "source_key": "d5",
+          "quote": "数据口径以门店台账与平台后台为准"
+        },
+        "id": "daily-report-zh:knowledge:metric_contract",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "source_register",
+        "title": "客户数据源授权与到数责任台账",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d6",
+          "d9"
+        ],
+        "content_requirements": [
+          "由客户平台管理员提供源、官方API或自行导出路径、授权范围与有效期凭据、责任人、最近同步、应到/实到字段及每日到数。",
+          "配置最小字段集、营业结束确认、续期责任人、补数路径和月度变更记录；不收集密钥正文，不跨客户复用授权配置。"
+        ],
+        "evidence": {
+          "source_key": "d6",
+          "quote": "未授权的源**一律不得采集**"
+        },
+        "id": "daily-report-zh:knowledge:source_register",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "detection_rules",
+        "title": "四规则检测与假阳性拦截规范",
+        "kind": "specification",
+        "supply": "source_supported",
+        "consumers": [
+          "d4",
+          "d7",
+          "d8",
+          "d10"
+        ],
+        "content_requirements": [
+          "从d4提取R1至R4公式、样本回退、星期对齐、同比冲突优先级、缺日断链、特殊期和小样本拦截及级别处置。",
+          "每条结果保存指标、日期、基线、实际值、规则版本、判定与排查项；须向父任务补取schema和脚本，核实边界值、统计窗口及行业基准实现。",
+          "源中行业范围与周末波动比例仅作待验证参考，不作为已验证普适事实。"
+        ],
+        "evidence": {
+          "source_key": "d4",
+          "quote": "同比与环比冲突时以同比为准"
+        },
+        "id": "daily-report-zh:knowledge:detection_rules",
+        "normalized_kind": "specification",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "store_context",
+        "title": "本店特殊期、历史参照与行动约束",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d4",
+          "d5",
+          "d8",
+          "d10"
+        ],
+        "content_requirements": [
+          "由店主提供品类、开业日期、促销记录、所在地节假日、上周同星期及去年同期导出，标注证据日期与适用门店。",
+          "提供责任人、预算上限、可执行范围；行业淡旺季另向平台或行业权威取得带时间地域的参照，不能替代本店实绩。"
+        ],
+        "evidence": {
+          "source_key": "d2",
+          "quote": "本店历史经营数据（趋势基线）；行业淡旺季参照表（平台侧）。"
+        },
+        "id": "daily-report-zh:knowledge:store_context",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "report_template",
+        "title": "经营日报可编辑交付与证据表达模板",
+        "kind": "template",
+        "supply": "source_supported",
+        "consumers": [
+          "d5",
+          "d8"
+        ],
+        "content_requirements": [
+          "从d5、d8整理结论、三数、单提醒、唯一行动及Word/Excel/JSON字段，区分摘要正文和全量明细。",
+          "规定参照缺失写法、健康区间与检测判定分栏、事实与待验证归因分栏、确认异常证据链接、人工复核栏和AI标识。",
+          "归因与排查方向必须能回到导出行或检测结果；不沿用示例因果断言或效果承诺。"
+        ],
+        "evidence": {
+          "source_key": "d5",
+          "quote": "每个数字都要有参照物"
+        },
+        "id": "daily-report-zh:knowledge:report_template",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "alert_policy",
+        "title": "本店预警静默、去重及升级配置",
+        "kind": "customer_fact",
+        "supply": "customer_configuration",
+        "consumers": [
+          "d7"
+        ],
+        "content_requirements": [
+          "由门店负责人提供push_levels、channels、silent_hours、on_call、dedup_window_hours及escalate_if_no_ack_minutes。",
+          "补齐时区、去重持久化键、确认回执、负责人替补和失败补发责任；默认12小时、30分钟及07:00汇总须经客户确认，不代表连接已开通。"
+        ],
+        "evidence": {
+          "source_key": "d7",
+          "quote": "同指标在去重窗口内不重复打扰"
+        },
+        "id": "daily-report-zh:knowledge:alert_policy",
+        "normalized_kind": "template",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "weekly_method",
+        "title": "周汇总星期结构与单行动优先级",
+        "kind": "method",
+        "supply": "source_supported",
+        "consumers": [
+          "d10"
+        ],
+        "content_requirements": [
+          "从d10取得周汇总、派生公式、周环比缺失处理、星期结构样本数和五级优先序。",
+          "行动模板保留责任人/动作/范围/选取理由与零预算限制；渠道调整仅形成建议，需额外渠道效率事实才能确定具体对象。"
+        ],
+        "evidence": {
+          "source_key": "d10",
+          "quote": "按 5 级优先级命中第一条即停"
+        },
+        "id": "daily-report-zh:knowledge:weekly_method",
+        "normalized_kind": "method",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "key": "privacy_release",
+        "title": "经营数据最小化与人工交付规范核验",
+        "kind": "standard",
+        "supply": "needs_authoritative_source",
+        "consumers": [
+          "d6",
+          "d7",
+          "d8",
+          "d9"
+        ],
+        "content_requirements": [
+          "由父任务取得现行权威个人信息处理、AI内容标识及适用平台规则，核实版本和适用范围，不直接认可仓库合规声明。",
+          "业务控制涵盖六类个人信息入库前剔除、原始文件不入仓不外传、商业明细访问范围、员工绩效不下发及人工审核记录；客户配置保存期限与接收者权限。",
+          "保留已清理副本与源数据不改写的边界、残留核验、发布前人工确认及打回记录。"
+        ],
+        "evidence": {
+          "source_key": "d6",
+          "quote": "不做\"先存再脱敏\""
+        },
+        "id": "daily-report-zh:knowledge:privacy_release",
+        "normalized_kind": "standard",
+        "customer_facts_supplied": false,
+        "content_acceptance": "pending_employee_production"
+      }
+    ],
+    "source_conflicts": [
+      {
+        "issue": "接入降级允许估算营收和行业替代，下游检测、日报与周建议禁止估算；且核销金额乘客单价的单位含义未说明。",
+        "resolution": "保留原降级能力为待核方案，返回父任务澄清公式及可用范围；真实经营链路不以估算填充必需实绩。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "用「团购核销金额 × 客单价」估算"
+        }
+      },
+      {
+        "issue": "纯提示词、无运行依赖的员工描述与原技能真实执行脚本要求不一致。",
+        "resolution": "区分草稿分析与实际计算交付；原脚本义务不降级，本次只提出方案，补取代码和执行证据后才能验收文件。",
+        "evidence": {
+          "source_key": "d4",
+          "quote": "必须真实运行脚本"
+        }
+      },
+      {
+        "issue": "采集对未授权源可给警告，但同时禁止采集；个人信息命中后的门禁重评及人工确认与允许下游字段关系不够明确。",
+        "resolution": "未授权源停用，个人信息清理后重检；不得把告警状态或人工批准当作授权，也不得仅凭门禁字段放行。",
+        "evidence": {
+          "source_key": "d9",
+          "quote": "未授权源不得采集"
+        }
+      },
+      {
+        "issue": "预警叙述含客流骤降、差评激增和核销异常，但检测核心输入未提供差评和核销的量化规则。",
+        "resolution": "保留业务需求为缺口，补取对应真实字段、基线与判定规则；不得声称现有四指标已覆盖三类业务异常。",
+        "evidence": {
+          "source_key": "d7",
+          "quote": "客流骤降 / 差评激增 / 核销异常"
+        }
+      },
+      {
+        "issue": "secondary合同复用brief-generator与data-ingest-adapter，而primary使用仓内技能；其正文未提供。",
+        "resolution": "d11的日报、采集、预警和周建议为重复职责；新增外部依赖解析及Spec/Mock权限声明核对义务，不冒充已读取外部Skill或自动替换primary。",
+        "evidence": {
+          "source_key": "d11",
+          "quote": "开源侧只发 Spec + Mock + 权限声明"
+        }
+      },
+      {
+        "issue": "员工合同手填三个数不足以满足四指标重算和真实异常检测；100%准时、ROI及示例实跑不是当前效果证据。",
+        "resolution": "手填路径仅可形成明确缺项草稿；完整验收需真实授权导出、调度与交付记录，不以示例或占位知识计完成。",
+        "evidence": {
+          "source_key": "d2",
+          "quote": "Mock 期支持手工填报 3 个数字"
+        }
+      }
+    ],
+    "external_requirements": [
+      {
+        "operation": "取得真实经营导出并核对口径",
+        "requirement": "由客户提供授权范围内、入库前去除个人信息的导出与字段说明、对账记录及历史参照；本次无客户数据或连接凭据。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "本技能**不连接任何外部系统**"
+        }
+      },
+      {
+        "operation": "验证计算和可编辑文件交付",
+        "requirement": "由父任务在获授权环境补取脚本、schema、依赖及执行日志，真实运行并核对JSON、Excel、Word、PNG一致性和文件可编辑性；此处不执行、不写盘。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "禁止自己编造 xlsx / png / json 内容或声称\"已生成\""
+        }
+      },
+      {
+        "operation": "落实入库前清理",
+        "requirement": "客户或获授权执行方对导出工作副本实际剔除敏感字段并出具残留检查证据；本只读分析不得删除或修改任何数据。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "脱敏命中项要**真的从数据集删除字段**，不是只打个标记"
+        }
+      },
+      {
+        "operation": "调度、人工审核与消息交付",
+        "requirement": "父任务补齐调度器、时区、审核人、真实确认记录及经授权消息渠道；发布、升级、归档与动作执行均另需授权，不将预览或候选清单计作已送达。",
+        "evidence": {
+          "source_key": "d7",
+          "quote": "仍失败则只留痕，标\"待人工补发\"，**不声称已发送**"
+        }
+      },
+      {
+        "operation": "核现行权威规范和平台要求",
+        "requirement": "由父任务取得现行权威及平台规则核实个人信息、AI标识与发布要求；仓库自述合法合规和平台兼容性均不能作为验证结论。",
+        "evidence": {
+          "source_key": "d9",
+          "quote": "请按所在平台要求完成 AI 生成内容标识"
+        }
+      }
+    ],
+    "employee_level_consumers": [],
+    "required_targets": [
+      "deepagents"
+    ],
+    "original_knowledge_mappings": [
+      {
+        "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/01-业务基础.md",
+        "path": "knowledge/wiki/entries/01-业务基础.md",
+        "git_blob": "c9b70ab476977cef96575cd3728ff9a533f7e2c9",
+        "role": "business_knowledge_entry",
+        "content_status": "retrieved",
+        "declared_placeholder": true,
+        "production_status": "pending",
+        "consumer_status": "pending",
+        "replacement_obligation_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+        "old_content_is_customer_fact": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/02-目标用户.md",
+        "path": "knowledge/wiki/entries/02-目标用户.md",
+        "git_blob": "17ab7f0752066da4c015a2a81f787267e0504d94",
+        "role": "business_knowledge_entry",
+        "content_status": "retrieved",
+        "declared_placeholder": true,
+        "production_status": "pending",
+        "consumer_status": "pending",
+        "replacement_obligation_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+        "old_content_is_customer_fact": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/03-语气与人设.md",
+        "path": "knowledge/wiki/entries/03-语气与人设.md",
+        "git_blob": "72d35fffac5a1a522a886b3157b852b63b30c2a0",
+        "role": "business_knowledge_entry",
+        "content_status": "retrieved",
+        "declared_placeholder": true,
+        "production_status": "pending",
+        "consumer_status": "pending",
+        "replacement_obligation_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+        "old_content_is_customer_fact": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/04-历史资产.md",
+        "path": "knowledge/wiki/entries/04-历史资产.md",
+        "git_blob": "f510d4f7bb43571f6426bf8f2c42dcc3e5a7b75b",
+        "role": "business_knowledge_entry",
+        "content_status": "retrieved",
+        "declared_placeholder": true,
+        "production_status": "pending",
+        "consumer_status": "pending",
+        "replacement_obligation_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+        "old_content_is_customer_fact": false,
+        "content_acceptance": "pending_employee_production"
+      },
+      {
+        "source_id": "bangwozuo/daily-report-zh@9dd65f22f3bb99bd0197d1079d757fdfd2246cc0:knowledge/wiki/entries/05-规则手册.md",
+        "path": "knowledge/wiki/entries/05-规则手册.md",
+        "git_blob": "9988ad00d2d52702c353bb63e1f130572d6480a4",
+        "role": "business_knowledge_entry",
+        "content_status": "retrieved",
+        "declared_placeholder": true,
+        "production_status": "pending",
+        "consumer_status": "pending",
+        "replacement_obligation_ids": [
+          "daily-report-zh:knowledge:metric_contract",
+          "daily-report-zh:knowledge:source_register",
+          "daily-report-zh:knowledge:detection_rules",
+          "daily-report-zh:knowledge:store_context",
+          "daily-report-zh:knowledge:report_template",
+          "daily-report-zh:knowledge:alert_policy",
+          "daily-report-zh:knowledge:weekly_method",
+          "daily-report-zh:knowledge:privacy_release"
+        ],
+        "mapping_kind": "employee_task_knowledge_scope_not_one_to_one_content_approval",
+        "old_content_is_customer_fact": false,
+        "content_acceptance": "pending_employee_production"
+      }
+    ],
+    "preparation_only": true,
+    "installation_accepted": false,
+    "business_accepted": false
+  },
+  "native_role_snapshot": {
+    "id": "daily-report-zh",
+    "name": "经营日报师",
+    "native_workflow": {
+      "id": "daily-role-current-source-sop",
+      "version": 1,
+      "sha256": "1d205ae1ee4821e6467e4a450a62f63655c98d5f281406ac23619daab6c43585"
+    },
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "enum": [
+            "sync",
+            "detect",
+            "copy",
+            "collect",
+            "daily",
+            "alert",
+            "weekly"
+          ]
+        },
+        "source_ref": {
+          "type": "object",
+          "properties": {
+            "artifact_id": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "artifact_id",
+            "revision",
+            "sha256"
+          ],
+          "additionalProperties": false
+        },
+        "metrics_ref": {
+          "type": "object",
+          "properties": {
+            "artifact_id": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "artifact_id",
+            "revision",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "operation"
+      ],
+      "additionalProperties": false
+    },
+    "output_schema": {
+      "type": "object",
+      "required": [
+        "status",
+        "staff_id",
+        "operation",
+        "output",
+        "files",
+        "data_origin"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "draft",
+            "needs_input",
+            "blocked"
+          ]
+        },
+        "staff_id": {
+          "const": "daily-report-zh"
+        },
+        "operation": {
+          "enum": [
+            "sync",
+            "detect",
+            "copy",
+            "collect",
+            "daily",
+            "alert",
+            "weekly"
+          ]
+        },
+        "output": {
+          "type": "object"
+        },
+        "files": {
+          "type": "array"
+        },
+        "data_origin": {
+          "type": "string"
+        }
+      }
+    },
+    "engine_gate": {
+      "project_id": "prj_6f1f1beae0634d0ca5cb",
+      "artifact_id": "art_479ffbdf429e4a12a28b",
+      "revision": 1,
+      "sha256": "a42c046675d1309d20f9795af23b62069e3eb739b354c3887ec53c406c58fc3b",
+      "scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+      "G1_passed": true,
+      "formal_assets_complete": false
+    },
+    "source_scope_sha256": "718fed6ab4919e3c9ff3dae27e657d91c26a1f1c724187a9ccb2573ef76ba7ad",
+    "source_conflicts": [
+      {
+        "issue": "接入降级允许估算营收和行业替代，下游检测、日报与周建议禁止估算；且核销金额乘客单价的单位含义未说明。",
+        "resolution": "保留原降级能力为待核方案，返回父任务澄清公式及可用范围；真实经营链路不以估算填充必需实绩。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "用「团购核销金额 × 客单价」估算"
+        }
+      },
+      {
+        "issue": "纯提示词、无运行依赖的员工描述与原技能真实执行脚本要求不一致。",
+        "resolution": "区分草稿分析与实际计算交付；原脚本义务不降级，本次只提出方案，补取代码和执行证据后才能验收文件。",
+        "evidence": {
+          "source_key": "d4",
+          "quote": "必须真实运行脚本"
+        }
+      },
+      {
+        "issue": "采集对未授权源可给警告，但同时禁止采集；个人信息命中后的门禁重评及人工确认与允许下游字段关系不够明确。",
+        "resolution": "未授权源停用，个人信息清理后重检；不得把告警状态或人工批准当作授权，也不得仅凭门禁字段放行。",
+        "evidence": {
+          "source_key": "d9",
+          "quote": "未授权源不得采集"
+        }
+      },
+      {
+        "issue": "预警叙述含客流骤降、差评激增和核销异常，但检测核心输入未提供差评和核销的量化规则。",
+        "resolution": "保留业务需求为缺口，补取对应真实字段、基线与判定规则；不得声称现有四指标已覆盖三类业务异常。",
+        "evidence": {
+          "source_key": "d7",
+          "quote": "客流骤降 / 差评激增 / 核销异常"
+        }
+      },
+      {
+        "issue": "secondary合同复用brief-generator与data-ingest-adapter，而primary使用仓内技能；其正文未提供。",
+        "resolution": "d11的日报、采集、预警和周建议为重复职责；新增外部依赖解析及Spec/Mock权限声明核对义务，不冒充已读取外部Skill或自动替换primary。",
+        "evidence": {
+          "source_key": "d11",
+          "quote": "开源侧只发 Spec + Mock + 权限声明"
+        }
+      },
+      {
+        "issue": "员工合同手填三个数不足以满足四指标重算和真实异常检测；100%准时、ROI及示例实跑不是当前效果证据。",
+        "resolution": "手填路径仅可形成明确缺项草稿；完整验收需真实授权导出、调度与交付记录，不以示例或占位知识计完成。",
+        "evidence": {
+          "source_key": "d2",
+          "quote": "Mock 期支持手工填报 3 个数字"
+        }
+      }
+    ],
+    "external_requirements": [
+      {
+        "operation": "取得真实经营导出并核对口径",
+        "requirement": "由客户提供授权范围内、入库前去除个人信息的导出与字段说明、对账记录及历史参照；本次无客户数据或连接凭据。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "本技能**不连接任何外部系统**"
+        }
+      },
+      {
+        "operation": "验证计算和可编辑文件交付",
+        "requirement": "由父任务在获授权环境补取脚本、schema、依赖及执行日志，真实运行并核对JSON、Excel、Word、PNG一致性和文件可编辑性；此处不执行、不写盘。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "禁止自己编造 xlsx / png / json 内容或声称\"已生成\""
+        }
+      },
+      {
+        "operation": "落实入库前清理",
+        "requirement": "客户或获授权执行方对导出工作副本实际剔除敏感字段并出具残留检查证据；本只读分析不得删除或修改任何数据。",
+        "evidence": {
+          "source_key": "d6",
+          "quote": "脱敏命中项要**真的从数据集删除字段**，不是只打个标记"
+        }
+      },
+      {
+        "operation": "调度、人工审核与消息交付",
+        "requirement": "父任务补齐调度器、时区、审核人、真实确认记录及经授权消息渠道；发布、升级、归档与动作执行均另需授权，不将预览或候选清单计作已送达。",
+        "evidence": {
+          "source_key": "d7",
+          "quote": "仍失败则只留痕，标\"待人工补发\"，**不声称已发送**"
+        }
+      },
+      {
+        "operation": "核现行权威规范和平台要求",
+        "requirement": "由父任务取得现行权威及平台规则核实个人信息、AI标识与发布要求；仓库自述合法合规和平台兼容性均不能作为验证结论。",
+        "evidence": {
+          "source_key": "d9",
+          "quote": "请按所在平台要求完成 AI 生成内容标识"
+        }
+      }
+    ],
+    "subagent_assessment": {
+      "enabled": false,
+      "reason": "本版处理确定性口径、规则与文件；不自动做因果归因或经营决策，复杂归因交接人工；不为岗位数量强造专家或Team"
+    },
+    "business_acceptance_input": "self_prepared_explicit_SYNTHETIC; not customer performance/ROI",
+    "original_optional_customer_facts_remain_conditional": true,
+    "installation_reader_revision": {
+      "original_production": "run_e9d126e981404537b55a",
+      "cause": "Store constructor attempted schema write inside existing install write transaction",
+      "repair": "same transaction and read-only other stores; same G1 criteria and raw dependencies; no model/design resend"
+    }
+  },
+  "qualification": {
+    "source_run_id": "run_23ed4baa464444ab8490",
+    "native_S01_S08": "passed",
+    "synthetic_business_only": true,
+    "current_main_skill_proof": {
+      "passed": true,
+      "scope": "installed five-file main Skill, actual HTTP SDK submission, r2 review note, real browser confirm r3, unchanged draft r1, native END, 5 original files, old14 history preserved",
+      "operation_id": "daily-191-main-skill-20261110-01",
+      "business_run_id": "run_4e3d35f47589443da921",
+      "native_run_id": "run_51d0fef4f63c4a94beb0",
+      "installation_id": "ins_3d6da62216a303c37294789e6096e6b7",
+      "manifest_sha256": "3d6da62216a303c37294789e6096e6b75c070602bb48d176d2d3ef87f8aa23ca",
+      "draft_id": "art_eeb7a3afd7a04a4a9cd9",
+      "draft_revision": 1,
+      "draft_sha256": "c253dab60118ff8a14aec0a6b887f081422b579f792a73bd6426189d9c98352f",
+      "review_id": "art_924c963002924fe189d6",
+      "review_revision": 3,
+      "model_calls": 0,
+      "business_submit_count": 1,
+      "S07_S08_replayed": false,
+      "automatic_Host_routing_verified": false,
+      "other_Hosts_verified": false,
+      "commercial_customer_data": false,
+      "R78": "retained",
+      "all38_accepted": false
+    },
+    "full_191_release_accepted": false,
+    "R78": "retained",
+    "all38_accepted": false
+  }
+}
